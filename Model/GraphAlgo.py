@@ -2,10 +2,10 @@ import json
 import math
 from typing import List
 
-from DiGraph import DiGraph
-from GraphInterface import GraphInterface
+from Model.DiGraph import DiGraph
+from Model.GraphInterface import GraphInterface
 from queue import Queue
-import MinHeap
+from Model.MinHeap import MinHeap
 
 
 class GraphAlgo():
