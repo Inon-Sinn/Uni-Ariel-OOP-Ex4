@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+class Model.DiGraph
+
+class Model.GraphAlgo{
+    loadFromJson()
+}
+class PyGame
+
+class Controller{
+    - client
+}
+
+Controller --> PyGame
+Controller --> Model
+PyGame --> Controller
+Model --> Controller
+
+@enduml
