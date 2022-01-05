@@ -8,7 +8,7 @@ from queue import Queue
 import MinHeap
 
 
-class GraphAlgo():
+class GraphAlgo:
 
     def __init__(self):
         self.graph = None

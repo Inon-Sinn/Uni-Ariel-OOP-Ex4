@@ -68,11 +68,11 @@ def my_scale(data, x=False, y=False):
 
 
 radius = 15
-
+print(client.get_info())
 client.add_agent("{\"id\":0}")
-# client.add_agent("{\"id\":1}")
-# client.add_agent("{\"id\":2}")
-# client.add_agent("{\"id\":3}")
+client.add_agent("{\"id\":14}")
+client.add_agent("{\"id\":10}")
+client.add_agent("{\"id\":5}")
 
 # this commnad starts the server - the game is running now
 client.start()
@@ -155,7 +155,10 @@ while client.is_running() == 'true':
     # choose next edge
     for agent in agents:
         if agent.dest == -1:
-            next_node = (agent.src - 1) % len(graph.Nodes)
+            if agent.id % 2 == 0:
+                next_node = (agent.src - 1) % len(graph.Nodes)
+            else:
+                next_node = (agent.src + 1) % len(graph.Nodes)
             client.choose_next_edge(
                 '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}')
             ttl = client.time_to_end()
