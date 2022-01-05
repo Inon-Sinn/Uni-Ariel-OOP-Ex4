@@ -3,13 +3,12 @@ import math
 from typing import List
 
 from DiGraph import DiGraph
-from GraphAlgoInterface import GraphAlgoInterface
 from GraphInterface import GraphInterface
 from queue import Queue
-from Algorithms.Minheap import MinHeap
+import MinHeap
 
 
-class GraphAlgo(GraphAlgoInterface):
+class GraphAlgo():
 
     def __init__(self):
         self.graph = None
