@@ -3,12 +3,12 @@ import json
 
 class Agent:
     def __init__(self, id, value, src, dest, speed, pos):
-        self.id
-        self.value
-        self.src
-        self.dest
-        self.speed
-        self.pos
+        self.id = id
+        self.value = value
+        self.src = src
+        self.dest = dest
+        self.speed = speed
+        self.pos = pos
 
 
 class Agents:
@@ -22,6 +22,7 @@ class Agents:
             src = agent['Agent']['src']
             dest = agent['Agent']['dest']
             speed = agent['Agent']['speed']
-            pos = tuple(float(s) for s in agent['Agent']['pos'].split(','))
-            a = agent(id, value, src, dest, speed, pos)
+            x,y,z = agent['Agent']['pos'].split(',')
+            pos = (float(x),float(y))
+            a = Agent(id, value, src, dest, speed, pos)
             self.agents.append(a)

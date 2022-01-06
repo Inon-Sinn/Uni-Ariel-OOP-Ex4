@@ -16,6 +16,24 @@ class GraphAlgo:
     def get_graph(self) -> GraphInterface:
         return self.graph
 
+    def load_from_json_string(self, jsonString : str) -> bool:
+        graph = DiGraph()
+        # add try catch statement for jsonDecodeError
+        fromJson = json.loads(jsonString)
+        for n in fromJson['Nodes']:
+            try:  # In case we are not given a position
+                x,y,z = n['pos'].split(',')
+                pos = (float(x),float(y))
+                graph.add_node(n['id'], pos)
+            except KeyError:
+                graph.add_node(n['id'])
+        for e in fromJson['Edges']:
+            graph.add_edge(e['src'], e['dest'], e['w'])
+
+        self.graph = graph
+
+        return True
+
     def load_from_json(self, file_name: str) -> bool:
         graph = DiGraph()
         try:  # Checks if the file even Exists
