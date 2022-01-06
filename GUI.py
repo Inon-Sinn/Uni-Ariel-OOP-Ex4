@@ -5,6 +5,7 @@ from Model.GraphAlgo import GraphAlgo
 from Model.classes.pokemons import Pokemon
 
 pygame.init()
+
 pygame.font.init()
 clock = pygame.time.Clock()
 
@@ -87,6 +88,7 @@ class Gui:
         """This is the main loop of the pygame, 60 ticks"""
 
         # variables
+        pygame.display.set_caption('THIS CANT BE!! he has power level of 5000!!!')
         background = pygame.image.load("Images/pokemon_Map.jpg")
         BoxWidth = 8
         hd = 10  # Boxes Height divider
@@ -166,7 +168,8 @@ class Gui:
                 self.drawPokemon(PokemonNodeRadius)
 
                 # draw Agents
-                self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius)
+                AgentsSize = 0.055 * self.screen.get_height()
+                self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
 
                 # update screen changes
                 pygame.display.update()
@@ -230,7 +233,7 @@ class Gui:
             rect.center = (x, y)
             self.screen.blit(pic, rect)
 
-    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius):
+    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize):
         # TODO maybe print the value of the agents in Debug mode
         """Draw the Agents on the Screen"""
         for agent in self.agents:
@@ -243,7 +246,12 @@ class Gui:
                 id_srf = FONT.render(str(agent.id), True, pygame.Color(AgentIdColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
             else:
-                print("Coming Soon")
+                filename = "Images/trainer{}.png".format(agent.id % 5)
+                pic = pygame.image.load(filename)
+                pic = pygame.transform.scale(pic, (AgentsSize * 1.6, AgentsSize * 3.1))
+                rect = pic.get_rect()
+                rect.center = (x, y)
+                self.screen.blit(pic, rect)
 
 
 class StopButton:
@@ -286,7 +294,7 @@ if __name__ == '__main__':
     pokemon2 = Pokemon(1, 1, pos2)
     pokemon = [pokemon1, pokemon2]
 
-    agent1 = fakeAgent(0, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
-    agent2 = fakeAgent(1, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
+    agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
+    agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
     agents = [agent1, agent2]
     test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=False)
