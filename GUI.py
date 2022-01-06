@@ -1,6 +1,5 @@
 from pygame import gfxdraw
 import pygame
-from pygame import *
 
 from Model.GraphAlgo import GraphAlgo
 
@@ -8,9 +7,11 @@ pygame.init()
 pygame.font.init()
 clock = pygame.time.Clock()
 
+# Fonts
 FONT = pygame.font.SysFont('Arial', 15, bold=True)
+TITLE_FONT = pygame.font.SysFont("Ariel", 25, bold=True)
 
-WIDTH, HEIGHT = 900, 740
+WIDTH, HEIGHT = 900, 570
 
 
 def scale(data, min_screen, max_screen, min_data, max_data):
@@ -21,12 +22,21 @@ def scale(data, min_screen, max_screen, min_data, max_data):
     return ((data - min_data) / (max_data - min_data)) * (max_screen - min_screen) + min_screen
 
 
+def draw_rect_outline(surface, rect, color, width=1):
+    """An auxiliary function that draw the outline of a Rectangle"""
+    x, y, w, h = rect
+    width = max(width, 1)  # Draw at least one rect.
+    width = min(min(width, w // 2), h // 2)  # Don't overdraw.
+    # This draws several smaller outlines inside the first outline.
+    for i in range(width):
+        pygame.gfxdraw.rectangle(surface, (x + i, y + i, w - i * 2, h - i * 2), color)
+
 class Gui:
-    """This class is our GUI"""
+    """This class is Implements The View, The GUI"""
 
     def __init__(self, graph, width: int, height: int, runtime: float, pokemon=None, agents=None):
 
-        # special variables
+        # Pokemon Game Variables
         if agents is None:
             agents = []
         if pokemon is None:
@@ -36,11 +46,10 @@ class Gui:
         self.timer = runtime
         self.points = 0
         self.mc = 0
-        self.graph = graph  # TODO should be a DiGraph
+        self.graph = graph
+        self.running = True
 
         # screen variables
-        self.width = width
-        self.height = height
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
         self.margin = 50
         self.upperMargin = self.screen.get_height() / 8
@@ -55,14 +64,17 @@ class Gui:
         self.MainRun()
 
     def update(self, pokemon, agents, points, mc, timer):
-        self.pokemon = pokemon
-        self.agents = agents
-        self.timer = timer
-        self.mc = mc
-        self.points = points
+        """Gets an Update from the Controller and Tells him the status"""
+        if self.running is not False:
+            self.pokemon = pokemon
+            self.agents = agents
+            self.timer = timer
+            self.mc = mc
+            self.points = points
+        return self.running
 
     def my_scale(self, data, x=False, y=False):
-        """For now i will leave it here check if it really is needed"""
+        """An auxiliary function to calculate Coordinates on the screen given their position"""
         if x:
             return scale(data, self.margin, self.screen.get_width() - self.margin, self.min_x, self.max_x)
         if y:
@@ -97,15 +109,16 @@ class Gui:
         # Upper Margin
         stop = StopButton(80, 100, ButtonTitleColor)
 
-        while True:  # TODO can be changed later
+        while True:
             for gui_event in pygame.event.get():
                 if gui_event.type == pygame.QUIT:
                     pygame.quit()
                     exit(0)
 
-                if gui_event.type == pygame.MOUSEBUTTONUP:  # TODO If we decide we will only have one button this could be changed
+                if gui_event.type == pygame.MOUSEBUTTONUP:
                     click = pygame.mouse.get_pos()
-                    # TODO here will be going the buttons
+                    if stop.check(click):
+                        self.running = False
 
                 # refresh surface
                 self.screen.fill(pygame.Color(screenColor))
@@ -115,13 +128,13 @@ class Gui:
                 # Render the Button
                 stop.render(self.screen, ButtonColor,
                             (self.screen.get_width() - self.upperMargin / 8, self.upperMargin / 8),
-                            (100, self.upperMargin * (6 / 8)))  # TODO Change the placement
-
-                titleFont = pygame.font
+                            (100, self.upperMargin * (6 / 8)))
+                draw_rect_outline(self.screen, stop.rect, (0, 0, 0), 1)
 
                 # Timer
                 id_srf = FONT.render("Time: {}".format(self.timer), True, pygame.Color(TextColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(100, 10)))
+                draw_rect_outline(self.screen, id_srf.get_rect(center=(100, 10)), (0, 0, 0), 1)
 
                 # Move Counter
                 id_srf = FONT.render("Moves: {}".format(self.mc), True, pygame.Color(TextColor))
@@ -137,7 +150,6 @@ class Gui:
                 # draw Nodes
                 self.drawNodes(NodeColor, NodeIdColor, NodeRadius)
 
-
                 # draw Pokemon
                 self.drawPokemon(PokemonColor, PokemonNodeRadius)
 
@@ -151,6 +163,7 @@ class Gui:
                 clock.tick(60)
 
     def drawNodes(self, NodeColor, NodeIdColor, NodeRadius):
+        """Draws the Nodes on the Screen"""
         for v in self.graph.get_all_v().values():
             # Determine the Coordinates
             x = self.my_scale(v.pos[0], True, False)
@@ -163,6 +176,7 @@ class Gui:
             self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
 
     def drawEdges(self, edgeColor, edgeWidth):
+        """Draws the Edges on the Screen"""
         for src in self.graph.get_all_v().values():
             for dest_id in self.graph.all_out_edges_of_node(src.Id):
                 src_x = self.my_scale(src.pos[0], True, False)
@@ -171,16 +185,17 @@ class Gui:
                 dest_y = self.my_scale(self.graph.getNode(dest_id).pos[1], False, True)
                 pygame.draw.aaline(self.screen, pygame.Color(edgeColor), (src_x, src_y), (dest_x, dest_y), edgeWidth)
 
-    def drawPokemon(self, PokemonColor,
-                    PokemonNodeRadius):  # TODO we could add the pictures instead of nodes of different colors
+    def drawPokemon(self, PokemonColor, PokemonNodeRadius):
+        """Draws the pokemon on the Screen"""
+        # TODO we could add the pictures instead of nodes of different colors
         for pok in self.pokemon:
             x = self.my_scale(pok.pos[0], True, False)
             y = self.my_scale(pok.pos[1], False, True)
             pygame.gfxdraw.aacircle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
             pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
 
-    def drawAgent(self, AgentColor, AgentIdColor,
-                  AgentsNodeRadius):  # TODO we could add the pictures instead of nodes of different colors
+    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius):
+        """Draw the Agents on the Screen"""
         for agent in self.agents:
             x = self.my_scale(agent.pos[0], True, False)
             y = self.my_scale(agent.pos[1], False, True)
@@ -211,6 +226,7 @@ class StopButton:
         """Check if the user clicked on the Button"""
         if self.rect.collidepoint(*click):
             return True  # TODO check how to return a message to the Controller, or how to actually run the function
+        return False
 
 
 if __name__ == '__main__':
