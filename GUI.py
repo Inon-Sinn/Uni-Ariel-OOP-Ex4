@@ -280,13 +280,13 @@ if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
 
-    pos1 = (algo.get_graph().getNode(1).pos[0], algo.get_graph().getNode(1).pos[1])
+    pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
     pokemon1 = Pokemon(16, -1, pos1)
-    pos2 = (algo.get_graph().getNode(10).pos[0], algo.get_graph().getNode(10).pos[1])
-    pokemon2 = Pokemon(-1, 1, pos2)
+    pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
+    pokemon2 = Pokemon(1, 1, pos2)
     pokemon = [pokemon1, pokemon2]
 
     agent1 = fakeAgent(0, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
     agent2 = fakeAgent(1, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
     agents = [agent1, agent2]
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=True)
+    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=False)
