@@ -68,7 +68,6 @@ def my_scale(data, x=False, y=False):
 
 
 radius = 15
-print(client.get_info())
 client.add_agent("{\"id\":0}")
 client.add_agent("{\"id\":14}")
 client.add_agent("{\"id\":10}")
