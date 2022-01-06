@@ -84,8 +84,9 @@ class Gui:
         AgentColor = (122, 61, 23)
         AgentIdColor = (0, 0, 0)
         marginColor = (0, 0, 0)
-        ButtonTitleColor = (0, 0, 0)
+        ButtonTitleColor = (255, 255, 255)
         ButtonColor = (0, 48, 142)
+        TextColor = (0, 0, 0)
 
         # Parameters
         NodeRadius = 15
@@ -112,26 +113,30 @@ class Gui:
                                    (self.screen.get_width(), self.upperMargin), 1)
 
                 # Render the Button
-                stop.render(self.screen, ButtonColor, (0, 0), (100, 80))  # TODO Change the placement
+                stop.render(self.screen, ButtonColor,
+                            (self.screen.get_width() - self.upperMargin / 8, self.upperMargin / 8),
+                            (100, self.upperMargin * (6 / 8)))  # TODO Change the placement
+
+                titleFont = pygame.font
 
                 # Timer
-                id_srf = FONT.render("Time:", True, pygame.Color(0, 0, 0))
+                id_srf = FONT.render("Time: {}".format(self.timer), True, pygame.Color(TextColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(100, 10)))
 
                 # Move Counter
-                id_srf = FONT.render("Moves:", True, pygame.Color(0, 0, 0))
+                id_srf = FONT.render("Moves: {}".format(self.mc), True, pygame.Color(TextColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(100, 20)))
 
                 # Point Counter
-                id_srf = FONT.render("Points:", True, pygame.Color(0, 0, 0))
+                id_srf = FONT.render("Points: {}".format(self.points), True, pygame.Color(TextColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(100, 30)))
 
+                # draw Edges
+                self.drawEdges(edgeColor, edgeWidth)
 
                 # draw Nodes
                 self.drawNodes(NodeColor, NodeIdColor, NodeRadius)
 
-                # draw Edges
-                self.drawEdges(edgeColor, edgeWidth)
 
                 # draw Pokemon
                 self.drawPokemon(PokemonColor, PokemonNodeRadius)
@@ -198,7 +203,7 @@ class StopButton:
     def render(self, surface, buttonColor, pos, newSize):
         """Render the Button on the screen"""
         self.rect.update(self.rect.left, self.rect.top, newSize[0], newSize[1])
-        self.rect.topleft = pos
+        self.rect.topright = pos
         pygame.draw.rect(surface, buttonColor, self.rect)
         surface.blit(self.title_srf, self.title_srf.get_rect(center=self.rect.center))
 
