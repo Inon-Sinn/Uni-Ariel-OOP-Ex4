@@ -97,8 +97,7 @@ class Gui:
         NodeColor = (0, 48, 142)  # #00308E
         NodeIdColor = (255, 255, 255)  # white
         edgeColor = (120, 81, 185)  # #7851B9
-        PokemonColor = (0, 255, 255)
-        AgentColor = (122, 61, 23)
+        AgentColor = (0, 255, 255)
         AgentIdColor = (0, 0, 0)
         ButtonTitleColor = (255, 255, 255)
         ButtonColor = (0, 48, 142)
@@ -108,7 +107,6 @@ class Gui:
 
         # Parameters
         NodeRadius = 15
-        PokemonNodeRadius = 0.05 * self.screen.get_height()
         AgentsNodeRadius = 10
         edgeWidth = 1
         BoxOutlineWidth = 2
@@ -165,7 +163,7 @@ class Gui:
 
                 # draw Pokemon
                 PokemonNodeRadius = 0.055 * self.screen.get_height()
-                self.drawPokemon(PokemonColor, PokemonNodeRadius)
+                self.drawPokemon(PokemonNodeRadius)
 
                 # draw Agents
                 self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius)
@@ -211,7 +209,7 @@ class Gui:
                 dest_y = self.my_scale(self.graph.getNode(dest_id).pos[1], False, True)
                 pygame.draw.aaline(self.screen, pygame.Color(edgeColor), (src_x, src_y), (dest_x, dest_y), edgeWidth)
 
-    def drawPokemon(self, PokemonColor, PokemonNodeRadius):
+    def drawPokemon(self, PokemonNodeRadius):
         """Draws the pokemon on the Screen,
         The pokemon will look left if src < dest => type > 0,
         The pokemon will look right if dest < src => type < 0.
@@ -271,6 +269,13 @@ class StopButton:
         return False
 
 
+class fakeAgent:
+    def __init__(self, Id, pos, value=0):
+        self.id = Id
+        self.value = value
+        self.pos = pos
+
+
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
@@ -281,5 +286,7 @@ if __name__ == '__main__':
     pokemon2 = Pokemon(-1, 1, pos2)
     pokemon = [pokemon1, pokemon2]
 
-    pos3 = (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1])
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon)
+    agent1 = fakeAgent(0, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
+    agent2 = fakeAgent(1, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
+    agents = [agent1, agent2]
+    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=True)
