@@ -66,7 +66,8 @@ class Gui:
         if x:
             return scale(data, self.margin, self.screen.get_width() - self.margin, self.min_x, self.max_x)
         if y:
-            return scale(data, self.margin + self.upperMargin, self.screen.get_height() - self.margin, self.min_y, self.max_y)
+            return scale(data, self.margin + self.upperMargin, self.screen.get_height() - self.margin, self.min_y,
+                         self.max_y)
 
     def MainRun(self):
         """This is the main loop of the pygame, 60 ticks"""
@@ -82,13 +83,18 @@ class Gui:
         PokemonColor = (0, 255, 255)
         AgentColor = (122, 61, 23)
         AgentIdColor = (0, 0, 0)
-        marginColor = (0,0,0)
+        marginColor = (0, 0, 0)
+        ButtonTitleColor = (0, 0, 0)
+        ButtonColor = (0, 48, 142)
 
         # Parameters
         NodeRadius = 15
         PokemonNodeRadius = 15
         AgentsNodeRadius = 10
         edgeWidth = 1
+
+        # Upper Margin
+        stop = StopButton(80, 100, ButtonTitleColor)
 
         while True:  # TODO can be changed later
             for gui_event in pygame.event.get():
@@ -102,7 +108,24 @@ class Gui:
 
                 # refresh surface
                 self.screen.fill(pygame.Color(screenColor))
-                pygame.draw.aaline(self.screen, pygame.Color(marginColor), (0, self.upperMargin), (self.screen.get_width(), self.upperMargin), 10)
+                pygame.draw.aaline(self.screen, pygame.Color(marginColor), (0, self.upperMargin),
+                                   (self.screen.get_width(), self.upperMargin), 1)
+
+                # Render the Button
+                stop.render(self.screen, ButtonColor, (0, 0), (100, 80))  # TODO Change the placement
+
+                # Timer
+                id_srf = FONT.render("Time:", True, pygame.Color(0, 0, 0))
+                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 10)))
+
+                # Move Counter
+                id_srf = FONT.render("Moves:", True, pygame.Color(0, 0, 0))
+                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 20)))
+
+                # Point Counter
+                id_srf = FONT.render("Points:", True, pygame.Color(0, 0, 0))
+                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 30)))
+
 
                 # draw Nodes
                 self.drawNodes(NodeColor, NodeIdColor, NodeRadius)
@@ -151,7 +174,8 @@ class Gui:
             pygame.gfxdraw.aacircle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
             pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
 
-    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius):  # TODO we could add the pictures instead of nodes of different colors
+    def drawAgent(self, AgentColor, AgentIdColor,
+                  AgentsNodeRadius):  # TODO we could add the pictures instead of nodes of different colors
         for agent in self.agents:
             x = self.my_scale(agent.pos[0], True, False)
             y = self.my_scale(agent.pos[1], False, True)
@@ -160,6 +184,28 @@ class Gui:
             # Write the Id
             id_srf = FONT.render(str(agent.Id), True, pygame.Color(AgentIdColor))
             self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
+
+
+class StopButton:
+    """This Class Represent the Stop Button"""
+
+    def __init__(self, height, width, titleColor):
+        self.height = height
+        self.width = width
+        self.rect = pygame.Rect((0, 0), (width, height))
+        self.title_srf = FONT.render("STOP", True, pygame.Color(titleColor))
+
+    def render(self, surface, buttonColor, pos, newSize):
+        """Render the Button on the screen"""
+        self.rect.update(self.rect.left, self.rect.top, newSize[0], newSize[1])
+        self.rect.topleft = pos
+        pygame.draw.rect(surface, buttonColor, self.rect)
+        surface.blit(self.title_srf, self.title_srf.get_rect(center=self.rect.center))
+
+    def check(self, click):
+        """Check if the user clicked on the Button"""
+        if self.rect.collidepoint(*click):
+            return True  # TODO check how to return a message to the Controller, or how to actually run the function
 
 
 if __name__ == '__main__':
