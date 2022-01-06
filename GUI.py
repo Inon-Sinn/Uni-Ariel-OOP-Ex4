@@ -83,10 +83,13 @@ class Gui:
 
     def MainRun(self):
         """This is the main loop of the pygame, 60 ticks"""
+
         # variables
+        background = pygame.image.load("Images/pokemon_Map.jpg")
         BoxWidth = 8
         hd = 10  # Boxes Height divider
         bHdP = 4  # boxed height divider portion
+
         # Colors
         screenColor = (255, 255, 255)  # white
         NodeColor = (0, 48, 142)  # #00308E
@@ -99,6 +102,7 @@ class Gui:
         ButtonColor = (0, 48, 142)
         boxOutlineColor = (0, 0, 0)
         TextColor = (255, 255, 255)
+        NodeOutlineColor = (0, 0, 0)
 
         # Parameters
         NodeRadius = 15
@@ -123,6 +127,9 @@ class Gui:
 
                 # refresh surface
                 self.screen.fill(pygame.Color(screenColor))
+                background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
+                rect = background.get_rect()
+                self.screen.blit(background, rect)
                 self.margin = max(self.screen.get_height() / 10, 50)
 
                 # Render the Button
@@ -134,28 +141,25 @@ class Gui:
                 pos = (self.screen.get_width() * (1 / BoxWidth) + 1, self.margin / hd)
                 text = " Time: {}s ".format(self.timer)
                 self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor,
-                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
+                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # Move Counter
                 pos = (self.screen.get_width() * (2 / BoxWidth) + 2, self.margin / hd)
                 text = " Moves: {} ".format(self.mc)
                 self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor,
-                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
+                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # Point Counter
                 pos = (self.screen.get_width() * (3 / BoxWidth) + 3, self.margin / hd)
                 text = " Points: {} ".format(self.points)
                 self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor,
-                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
+                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # draw Edges
                 self.drawEdges(edgeColor, edgeWidth)
 
                 # draw Nodes
-                self.drawNodes(NodeColor, NodeIdColor, NodeRadius)
+                self.drawNodes(NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor)
 
                 # draw Pokemon
                 self.drawPokemon(PokemonColor, PokemonNodeRadius)
@@ -179,7 +183,7 @@ class Gui:
         self.screen.blit(id_srf, id_srf.get_rect(center=rect.center))
         draw_rect_outline(self.screen, rect, boxOutlineColor, BoxOutlineWidth)
 
-    def drawNodes(self, NodeColor, NodeIdColor, NodeRadius):
+    def drawNodes(self, NodeColor, NodeIdColor, NodeRadius,NodeOutlineColor):
         """Draws the Nodes on the Screen"""
         for v in self.graph.get_all_v().values():
             # Determine the Coordinates
@@ -188,6 +192,7 @@ class Gui:
             # Draw the node
             pygame.gfxdraw.aacircle(self.screen, int(x), int(y), NodeRadius, pygame.Color(NodeColor))
             pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), NodeRadius, pygame.Color(NodeColor))
+            pygame.draw.circle(self.screen, pygame.Color(NodeOutlineColor), (int(x), int(y)), NodeRadius, 1)  # Draws an outline
             # Write the Id
             id_srf = FONT.render(str(v.Id), True, pygame.Color(NodeIdColor))
             self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
