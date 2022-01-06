@@ -16,7 +16,6 @@ class Pokemons:
         for pok in pokemonss["Pokemons"]:
             value = pok["Pokemon"]['value']
             type = pok["Pokemon"]['type']
-            pos = pok["Pokemon"]['pos']
-            print(pos)
+            pos = tuple(float(s) for s in pok["Pokemon"]['pos'].split(','))
             pokemon = Pokemon(value, type, pos)
             self.pokemons.append(pokemon)

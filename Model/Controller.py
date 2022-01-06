@@ -3,73 +3,92 @@ from types import SimpleNamespace
 from Model.DiGraph import DiGraph
 from Model.GraphAlgo import GraphAlgo
 from client_python.client import Client
+from classes.agents import *
+from classes.pokemons import *
 import json
-#
-# cntrl = controller()
-#
-# def close:
-#     cntrl.close()
-#
-# class controller:
-ip = '127.0.0.1'
-port = 6666
-
-# start connection
-client = Client()
-client.start_connection(ip, port)
-
-# get the graph
-graph_json = client.get_graph()
-graphAlgo = GraphAlgo()
-info = json.loads(client.get_info())
-graph_filename = "../" + info["GameServer"]["graph"]
-
-graphAlgo.load_from_json(graph_filename)
-graph = graphAlgo.get_graph()
-if graphAlgo.get_graph() is None:
-    print('no graph found')
-else:
-    for node in graphAlgo.get_graph().get_all_v().values():
-        print(node)
-# pokemons
-# pokemons = client.get_pokemons()
-# pokemons_obj = json.loads(pokemons, object_hook=lambda d: SimpleNamespace(**d))
-# print(pokemons_obj)
-#
-# agents = json.loads(client.get_agents(), object_hook=lambda d: SimpleNamespace(**d))
-
-# print(pokemons_obj)
-print(agents)
 
 
-# print (agents_obj)
+class controller:
 
-def find_next_route():
-    # implement algorithm here
-    pass
+    def __init__(self):
+        ip = '127.0.0.1'
+        port = 6666
+        # start connection
+        self.client = Client()
+        self.client.start_connection(ip, port)
+
+        self.graph  # declare variables
+        self.graphAlgo
+        self.set_graph_and_algo()
+
+        self.agents  # declare variables
+        self.pokemons
+        self.update_Pokemons()
+        self.update_Agents()
+
+    def find_next_route(self):
+        # implement algorithm here
+        pass
+
+    def close(self):
+        self.client.stop_connection()
+
+    def update_GUI(self):
+        # get parameters here and pass them to gui
+        pass
+
+    def set_graph_and_algo(self):
+        graph_json = self.client.get_graph()  # geting json of graph
+        self.graphAlgo = GraphAlgo()  # seting new graphalgo
+        info = json.loads(self.client.get_info())  # geting info json
+        graph_filename = "../" + info["GameServer"]["graph"]  # geting filename from info
+        self.graphAlgo.load_from_json(graph_filename)  # loading the graph into algo
+        self.graph = self.graphAlgo.get_graph()  # seting graph
+        if self.graphAlgo.get_graph() is None:  # sanity check
+            print('no graph found')
+
+    def update_Agents(self):
+        agents_json = self.client.get_agents()
+        self.agents = Agents(agents_json)
+
+    def update_Pokemons(self):
+        pokemons_json = self.client.get_pokemons()  # setting pokemons and agents
+        self.pokemons = Pokemons(pokemons_json)
+
+    def add_agents(self, list_of_starting_nodes):
+        if len(list_of_starting_nodes) > 4:
+            print("cant insert more than 4 agents")
+        for starting_node in list_of_starting_nodes:
+            self.client.add_agent("{\"id\":" + starting_node + "}")
+        # self.client.add_agent("{\"id\":0}")
+        # self.client.add_agent("{\"id\":14}")
+        # self.client.add_agent("{\"id\":10}")
+        # self.client.add_agent("{\"id\":5}")
+
+    def set_next_edge(self, dict_id_to_edge):
+        for id in dict_id_to_edge.keys():
+            # insert algorithm here
+            pass
 
 
-def update_GUI():
-    # get parameters here and pass them to gui
-    pass
+        self.client.move()
 
 
-for agent in agents:
-    if (agent.dest != -1):
-        # insert algorithm here
-        node_src = graph.get_all_v()[agent.src]
-        for node in node_src.get_all_out_edges():
-            print(node)
-    # while client.is_running():
-    #     for agent in agents:
-    #         if (agent.dest != -1):
-    #             # insert algorithm here
-    #             node_src = graph.get_all_v()[agent.src]
-    #             for node in node_src.get_all_out_edges():
-    #                 print(node)
-    #             # choose next edge here
-    #             client.choose_next_edge(
-    #                 '{"agent_id":' + str(agent.id) + ', "next_node_id":' + str(next_node) + '}')
-    #             pass
+# *********** main loop ************#
+# declare static controller that can be turned off if user presses stop
+cntrl = controller()
 
-    client.move()
+
+def close():
+    cntrl.close()
+
+
+while cntrl.client.is_running():
+    cntrl.update_Agents()
+    cntrl.update_Pokemons()
+
+    # insert algorithm here
+
+    cntrl.set_next_edge()  # insert edges here
+
+
