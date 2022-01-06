@@ -9,7 +9,7 @@ clock = pygame.time.Clock()
 
 # Fonts
 FONT = pygame.font.SysFont('Arial', 15, bold=True)
-TITLE_FONT = pygame.font.SysFont("Ariel", 25, bold=True)
+TITLE_FONT = pygame.font.SysFont("Arial", 15, bold=True)
 
 WIDTH, HEIGHT = 900, 570
 
@@ -31,6 +31,7 @@ def draw_rect_outline(surface, rect, color, width=1):
     for i in range(width):
         pygame.gfxdraw.rectangle(surface, (x + i, y + i, w - i * 2, h - i * 2), color)
 
+
 class Gui:
     """This class is Implements The View, The GUI"""
 
@@ -51,7 +52,7 @@ class Gui:
 
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
-        self.margin = 50
+        self.margin = self.screen.get_height() / 10
         self.upperMargin = self.screen.get_height() / 8
 
         # Coordinates used for Scaling
@@ -78,15 +79,14 @@ class Gui:
         if x:
             return scale(data, self.margin, self.screen.get_width() - self.margin, self.min_x, self.max_x)
         if y:
-            return scale(data, self.margin + self.upperMargin, self.screen.get_height() - self.margin, self.min_y,
-                         self.max_y)
+            return scale(data, self.margin, self.screen.get_height() - self.margin, self.min_y, self.max_y)
 
     def MainRun(self):
         """This is the main loop of the pygame, 60 ticks"""
         # variables
-        self.margin = 50
-        self.upperMargin = self.screen.get_height() / 8
-
+        BoxWidth = 8
+        hd = 10  # Boxes Height divider
+        bHdP = 4  # boxed height divider portion
         # Colors
         screenColor = (255, 255, 255)  # white
         NodeColor = (0, 48, 142)  # #00308E
@@ -95,16 +95,17 @@ class Gui:
         PokemonColor = (0, 255, 255)
         AgentColor = (122, 61, 23)
         AgentIdColor = (0, 0, 0)
-        marginColor = (0, 0, 0)
         ButtonTitleColor = (255, 255, 255)
         ButtonColor = (0, 48, 142)
-        TextColor = (0, 0, 0)
+        boxOutlineColor = (0, 0, 0)
+        TextColor = (255, 255, 255)
 
         # Parameters
         NodeRadius = 15
         PokemonNodeRadius = 15
         AgentsNodeRadius = 10
         edgeWidth = 1
+        BoxOutlineWidth = 2
 
         # Upper Margin
         stop = StopButton(80, 100, ButtonTitleColor)
@@ -122,27 +123,33 @@ class Gui:
 
                 # refresh surface
                 self.screen.fill(pygame.Color(screenColor))
-                pygame.draw.aaline(self.screen, pygame.Color(marginColor), (0, self.upperMargin),
-                                   (self.screen.get_width(), self.upperMargin), 1)
+                self.margin = max(self.screen.get_height() / 10, 50)
 
                 # Render the Button
-                stop.render(self.screen, ButtonColor,
-                            (self.screen.get_width() - self.upperMargin / 8, self.upperMargin / 8),
-                            (100, self.upperMargin * (6 / 8)))
-                draw_rect_outline(self.screen, stop.rect, (0, 0, 0), 1)
+                stop.render(self.screen, ButtonColor, (0, self.margin / hd),
+                            (self.screen.get_width() * (1 / BoxWidth), self.margin * (bHdP / hd)))
+                draw_rect_outline(self.screen, stop.rect, boxOutlineColor, BoxOutlineWidth)
 
                 # Timer
-                id_srf = FONT.render("Time: {}".format(self.timer), True, pygame.Color(TextColor))
-                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 10)))
-                draw_rect_outline(self.screen, id_srf.get_rect(center=(100, 10)), (0, 0, 0), 1)
+                pos = (self.screen.get_width() * (1 / BoxWidth) + 1, self.margin / hd)
+                text = " Time: {}s ".format(self.timer)
+                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                                 TextColor,
+                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # Move Counter
-                id_srf = FONT.render("Moves: {}".format(self.mc), True, pygame.Color(TextColor))
-                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 20)))
+                pos = (self.screen.get_width() * (2 / BoxWidth) + 2, self.margin / hd)
+                text = " Moves: {} ".format(self.mc)
+                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                                 TextColor,
+                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # Point Counter
-                id_srf = FONT.render("Points: {}".format(self.points), True, pygame.Color(TextColor))
-                self.screen.blit(id_srf, id_srf.get_rect(center=(100, 30)))
+                pos = (self.screen.get_width() * (3 / BoxWidth) + 3, self.margin / hd)
+                text = " Points: {} ".format(self.points)
+                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                                 TextColor,
+                                 ButtonColor, boxOutlineColor, BoxOutlineWidth)
 
                 # draw Edges
                 self.drawEdges(edgeColor, edgeWidth)
@@ -161,6 +168,16 @@ class Gui:
 
                 # refresh rate
                 clock.tick(60)
+
+    def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
+        # Make an Rectangle of the right size adn draw the the Text Box
+        rect = pygame.Rect((0, 0), (width, height))
+        rect.topleft = pos
+        pygame.draw.rect(self.screen, boxColor, rect)
+        # Add the Text to Surface
+        id_srf = FONT.render(text, True, pygame.Color(TextColor))
+        self.screen.blit(id_srf, id_srf.get_rect(center=rect.center))
+        draw_rect_outline(self.screen, rect, boxOutlineColor, BoxOutlineWidth)
 
     def drawNodes(self, NodeColor, NodeIdColor, NodeRadius):
         """Draws the Nodes on the Screen"""
@@ -218,7 +235,7 @@ class StopButton:
     def render(self, surface, buttonColor, pos, newSize):
         """Render the Button on the screen"""
         self.rect.update(self.rect.left, self.rect.top, newSize[0], newSize[1])
-        self.rect.topright = pos
+        self.rect.topleft = pos
         pygame.draw.rect(surface, buttonColor, self.rect)
         surface.blit(self.title_srf, self.title_srf.get_rect(center=self.rect.center))
 
