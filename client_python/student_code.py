@@ -84,7 +84,7 @@ The GUI and the "algo" are mixed - refactoring using MVC design pattern is requi
 while client.is_running() == 'true':
     pokemons = json.loads(client.get_pokemons(),
                           object_hook=lambda d: SimpleNamespace(**d)).Pokemons
-    # print(pokemons)
+    print(pokemons)
     pokemons = [p.Pokemon for p in pokemons]
     for p in pokemons:
         x, y, _ = p.pos.split(',')
@@ -92,11 +92,13 @@ while client.is_running() == 'true':
             float(x), x=True), y=my_scale(float(y), y=True))
     agents = json.loads(client.get_agents(),
                         object_hook=lambda d: SimpleNamespace(**d)).Agents
+    # print(agents)
     agents = [agent.Agent for agent in agents]
     for a in agents:
         x, y, _ = a.pos.split(',')
         a.pos = SimpleNamespace(x=my_scale(
             float(x), x=True), y=my_scale(float(y), y=True))
+
     # check events
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -162,7 +164,7 @@ while client.is_running() == 'true':
             client.choose_next_edge(
                 '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}')
             ttl = client.time_to_end()
-            print(ttl, client.get_info())
+            # print(ttl, client.get_info())
 
     client.move()
 # game over:

@@ -2,8 +2,10 @@ from pygame import gfxdraw
 import pygame
 
 from Model.GraphAlgo import GraphAlgo
+from Model.classes.pokemons import Pokemon
 
 pygame.init()
+
 pygame.font.init()
 clock = pygame.time.Clock()
 
@@ -35,7 +37,7 @@ def draw_rect_outline(surface, rect, color, width=1):
 class Gui:
     """This class is Implements The View, The GUI"""
 
-    def __init__(self, graph, width: int, height: int, runtime: float, pokemon=None, agents=None):
+    def __init__(self, graph, width: int, height: int, runtime: float, pokemon=None, agents=None, debug=False):
 
         # Pokemon Game Variables
         if agents is None:
@@ -48,6 +50,7 @@ class Gui:
         self.points = 0
         self.mc = 0
         self.graph = graph
+        self.debug = debug
         self.running = True
 
         # screen variables
@@ -85,6 +88,7 @@ class Gui:
         """This is the main loop of the pygame, 60 ticks"""
 
         # variables
+        pygame.display.set_caption('THIS CANT BE!! he has power level of 5000!!!')
         background = pygame.image.load("Images/pokemon_Map.jpg")
         BoxWidth = 8
         hd = 10  # Boxes Height divider
@@ -95,18 +99,19 @@ class Gui:
         NodeColor = (0, 48, 142)  # #00308E
         NodeIdColor = (255, 255, 255)  # white
         edgeColor = (120, 81, 185)  # #7851B9
-        PokemonColor = (0, 255, 255)
-        AgentColor = (122, 61, 23)
+        AgentColor = (0, 255, 255)
         AgentIdColor = (0, 0, 0)
         ButtonTitleColor = (255, 255, 255)
         ButtonColor = (0, 48, 142)
         boxOutlineColor = (0, 0, 0)
         TextColor = (255, 255, 255)
         NodeOutlineColor = (0, 0, 0)
+        PokemonTextColor = (255, 255, 255)
+        PokemonColor = (0, 0, 0)
 
         # Parameters
         NodeRadius = 15
-        PokemonNodeRadius = 15
+        pokemonDebugRadius = 20
         AgentsNodeRadius = 10
         edgeWidth = 1
         BoxOutlineWidth = 2
@@ -125,9 +130,9 @@ class Gui:
                     if stop.check(click):
                         self.running = False
 
-                # refresh surface
+                # refresh surface and Background
                 self.screen.fill(pygame.Color(screenColor))
-                background = pygame.transform.scale(background, (self.screen.get_width(),self.screen.get_height()))
+                background = pygame.transform.scale(background, (self.screen.get_width(), self.screen.get_height()))
                 rect = background.get_rect()
                 self.screen.blit(background, rect)
                 self.margin = max(self.screen.get_height() / 10, 50)
@@ -162,10 +167,12 @@ class Gui:
                 self.drawNodes(NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor)
 
                 # draw Pokemon
-                self.drawPokemon(PokemonColor, PokemonNodeRadius)
+                PokemonNodeRadius = 0.055 * self.screen.get_height()
+                self.drawPokemon(PokemonNodeRadius,PokemonColor, PokemonTextColor, pokemonDebugRadius)
 
                 # draw Agents
-                self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius)
+                AgentsSize = 0.055 * self.screen.get_height()
+                self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
 
                 # update screen changes
                 pygame.display.update()
@@ -174,7 +181,8 @@ class Gui:
                 clock.tick(60)
 
     def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
-        # Make an Rectangle of the right size adn draw the the Text Box
+        """Draws the Text Box given the right input"""
+        # Make an Rectangle of the right size and draw the the Text Box
         rect = pygame.Rect((0, 0), (width, height))
         rect.topleft = pos
         pygame.draw.rect(self.screen, boxColor, rect)
@@ -183,7 +191,7 @@ class Gui:
         self.screen.blit(id_srf, id_srf.get_rect(center=rect.center))
         draw_rect_outline(self.screen, rect, boxOutlineColor, BoxOutlineWidth)
 
-    def drawNodes(self, NodeColor, NodeIdColor, NodeRadius,NodeOutlineColor):
+    def drawNodes(self, NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor):
         """Draws the Nodes on the Screen"""
         for v in self.graph.get_all_v().values():
             # Determine the Coordinates
@@ -192,7 +200,8 @@ class Gui:
             # Draw the node
             pygame.gfxdraw.aacircle(self.screen, int(x), int(y), NodeRadius, pygame.Color(NodeColor))
             pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), NodeRadius, pygame.Color(NodeColor))
-            pygame.draw.circle(self.screen, pygame.Color(NodeOutlineColor), (int(x), int(y)), NodeRadius, 1)  # Draws an outline
+            pygame.draw.circle(self.screen, pygame.Color(NodeOutlineColor), (int(x), int(y)), NodeRadius,
+                               1)  # Draws an outline
             # Write the Id
             id_srf = FONT.render(str(v.Id), True, pygame.Color(NodeIdColor))
             self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
@@ -207,25 +216,54 @@ class Gui:
                 dest_y = self.my_scale(self.graph.getNode(dest_id).pos[1], False, True)
                 pygame.draw.aaline(self.screen, pygame.Color(edgeColor), (src_x, src_y), (dest_x, dest_y), edgeWidth)
 
-    def drawPokemon(self, PokemonColor, PokemonNodeRadius):
-        """Draws the pokemon on the Screen"""
-        # TODO we could add the pictures instead of nodes of different colors
+    def drawPokemon(self, PokemonNodeRadius, PokemonColor, PokemonTextColor, pokemonDebugRadius):
+        """Draws the pokemon on the Screen,
+        The pokemon will look left if src < dest => type > 0,
+        The pokemon will look right if dest < src => type < 0.
+        in the direction of the src (not really)"""
         for pok in self.pokemon:
             x = self.my_scale(pok.pos[0], True, False)
             y = self.my_scale(pok.pos[1], False, True)
-            pygame.gfxdraw.aacircle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
-            pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), PokemonNodeRadius, pygame.Color(PokemonColor))
+            if self.debug == 0:
+                # Draw the pokemon
+                if 0 < pok.value < 15:
+                    filename = "Images/pokemon{}.png".format(pok.value)
+                else:
+                    filename = "Images/pokemon3.png"
+                pic = pygame.image.load(filename)
+                if pok.type == -1:
+                    pic = pygame.transform.flip(pic, True, False)
+                pic = pygame.transform.scale(pic, (PokemonNodeRadius * 2, PokemonNodeRadius * 2))
+                rect = pic.get_rect()
+                rect.center = (x, y)
+                self.screen.blit(pic, rect)
+            else:
+                pygame.gfxdraw.aacircle(self.screen, int(x), int(y), pokemonDebugRadius, pygame.Color(PokemonColor))
+                pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), pokemonDebugRadius, pygame.Color(PokemonColor))
+                # Write the Id
+                title = "{},{}".format(pok.type, pok.value)
+                id_srf = FONT.render(title, True, pygame.Color(PokemonTextColor))
+                self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
 
-    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius):
+    def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize):
+        # TODO maybe print the value of the agents in Debug mode
         """Draw the Agents on the Screen"""
         for agent in self.agents:
             x = self.my_scale(agent.pos[0], True, False)
             y = self.my_scale(agent.pos[1], False, True)
-            pygame.gfxdraw.aacircle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
-            pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
-            # Write the Id
-            id_srf = FONT.render(str(agent.Id), True, pygame.Color(AgentIdColor))
-            self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
+            if self.debug:
+                pygame.gfxdraw.aacircle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
+                pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
+                # Write the Id
+                id_srf = FONT.render(str(agent.id), True, pygame.Color(AgentIdColor))
+                self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
+            else:
+                filename = "Images/trainer{}.png".format(agent.id % 5)
+                pic = pygame.image.load(filename)
+                pic = pygame.transform.scale(pic, (AgentsSize * 1.6, AgentsSize * 3.1))
+                rect = pic.get_rect()
+                rect.center = (x, y)
+                self.screen.blit(pic, rect)
 
 
 class StopButton:
@@ -247,11 +285,28 @@ class StopButton:
     def check(self, click):
         """Check if the user clicked on the Button"""
         if self.rect.collidepoint(*click):
-            return True  # TODO check how to return a message to the Controller, or how to actually run the function
+            return True
         return False
+
+
+class fakeAgent:  # TODO remove this
+    def __init__(self, Id, pos, value=0):
+        self.id = Id
+        self.value = value
+        self.pos = pos
 
 
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120)
+
+    pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
+    pokemon1 = Pokemon(16, -1, pos1)
+    pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
+    pokemon2 = Pokemon(1, 1, pos2)
+    pokemon = [pokemon1, pokemon2]
+
+    agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
+    agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
+    agents = [agent1, agent2]
+    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=False)
