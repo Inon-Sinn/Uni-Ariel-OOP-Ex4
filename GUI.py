@@ -1,8 +1,12 @@
 from pygame import gfxdraw
 import pygame
 import os
+
+from Model.Controller import controller
 from Model.GraphAlgo import GraphAlgo
 from Model.classes.pokemons import Pokemon
+
+import time
 
 pygame.init()
 
@@ -37,24 +41,24 @@ def draw_rect_outline(surface, rect, color, width=1):
 class Gui:
     """This class is Implements The View, The GUI"""
 
-    def __init__(self, graph, width: int, height: int, runtime: float, pokemon=None, agents=None, debug=False):
+    def __init__(self, width: int, height: int, debug=False):
+
+        self.cntrl = controller()
+        self.firstRun = True
 
         # Pokemon Game Variables
-        if agents is None:
-            agents = []
-        if pokemon is None:
-            pokemon = []
-        self.agents = agents
-        self.pokemon = pokemon
-        self.timer = runtime
+        self.agents = self.cntrl.agents.agents
+        self.pokemon = self.cntrl.pokemons.pokemons
+        self.timer = 0
         self.points = 0
         self.mc = 0
-        self.graph = graph
+        self.graph = self.cntrl.graph
         self.debug = debug
         self.running = True
-        print(os.getcwd())
-        os.chdir('../')
-        print(os.getcwd())
+        # print(os.getcwd())
+        # os.chdir('../')
+        # print(os.getcwd())
+
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
         self.margin = self.screen.get_height() / 10
@@ -69,15 +73,13 @@ class Gui:
         # Run the Gui
         self.MainRun()
 
-    def update(self, pokemon, agents, points, mc, timer):
+    def update(self, points, mc, timer):
         """Gets an Update from the Controller and Tells him the status"""
-        if self.running is not False:
-            self.pokemon = pokemon
-            self.agents = agents
-            self.timer = timer
-            self.mc = mc
-            self.points = points
-        return self.running
+        self.pokemon = self.cntrl.pokemons.pokemons
+        self.agents = self.cntrl.agents.agents
+        self.timer = timer
+        self.mc = mc
+        self.points = points
 
     def my_scale(self, data, x=False, y=False):
         """An auxiliary function to calculate Coordinates on the screen given their position"""
@@ -131,6 +133,9 @@ class Gui:
                     click = pygame.mouse.get_pos()
                     if stop.check(click):
                         self.running = False
+
+                # update the data
+                self.updateController()
 
                 # refresh surface and Background
                 self.screen.fill(pygame.Color(screenColor))
@@ -268,6 +273,19 @@ class Gui:
                 rect.center = (x, y)
                 self.screen.blit(pic, rect)
 
+    def updateController(self):
+        if self.firstRun:
+            self.firstRun = False
+            self.cntrl.add_agents([])
+        self.cntrl.update_Agents()
+        self.cntrl.update_Pokemons()
+        list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
+        self.cntrl.insert_edges_to_client(list_tup)
+        self.cntrl.ttl = float(self.cntrl.client.time_to_end())
+        # print(self.cntrl.ttl, self.cntrl.client.get_info())
+        # self.cntrl.client.move()
+        self.update(self.cntrl.ttl, 0, 0)
+
 
 class StopButton:
     """This Class Represent the Stop Button"""
@@ -302,14 +320,28 @@ class fakeAgent:  # TODO remove this
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
+    test = Gui(WIDTH, HEIGHT)
 
-    pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
-    pokemon1 = Pokemon(16, -1, pos1)
-    pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
-    pokemon2 = Pokemon(1, 1, pos2)
-    pokemon = [pokemon1, pokemon2]
-
-    agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
-    agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
-    agents = [agent1, agent2]
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=False)
+    # pygame.mainloop(10)
+    # t1 = threading.Thread(target=test.MainRun())
+    # t1.setName("First Thread")
+    # t1.start()
+    #
+    #
+    #
+    # pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
+    # pokemon1 = Pokemon(16, -1, pos1)
+    # pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
+    # pokemon2 = Pokemon(1, 1, pos2)
+    # pokemon = [pokemon1, pokemon2]
+    #
+    # agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
+    # agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
+    # agents = [agent1, agent2]
+    #
+    # # t2 = threading.Thread(target=test.update(), args=[pokemon,agents,100,10,150])
+    # # t2.setName("Second Thread")
+    # # time.sleep(1)
+    # # t2.start()
+    # test.pokemon = pokemon
+    # test.update(pokemon,agents,100,10,150)
