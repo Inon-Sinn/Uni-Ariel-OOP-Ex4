@@ -1,10 +1,11 @@
 from pygame import gfxdraw
 import pygame
 import os
+
+from Model.Controller import controller
 from Model.GraphAlgo import GraphAlgo
 from Model.classes.pokemons import Pokemon
 
-import threading
 import time
 
 pygame.init()
@@ -40,19 +41,18 @@ def draw_rect_outline(surface, rect, color, width=1):
 class Gui:
     """This class is Implements The View, The GUI"""
 
-    def __init__(self, graph, width: int, height: int, runtime: float, pokemon=None, agents=None, debug=False):
+    def __init__(self, width: int, height: int, debug=False):
+
+        self.cntrl = controller()
+        self.firstRun = True
 
         # Pokemon Game Variables
-        if agents is None:
-            agents = []
-        if pokemon is None:
-            pokemon = []
-        self.agents = agents
-        self.pokemon = pokemon
-        self.timer = runtime
+        self.agents = self.cntrl.agents.agents
+        self.pokemon = self.cntrl.pokemons.pokemons
+        self.timer = 0
         self.points = 0
         self.mc = 0
-        self.graph = graph
+        self.graph = self.cntrl.graph
         self.debug = debug
         self.running = True
         # print(os.getcwd())
@@ -71,17 +71,15 @@ class Gui:
         self.max_y = max(self.graph.get_all_v().values(), key=lambda n: n.pos[1]).pos[1]
 
         # Run the Gui
-        # self.MainRun()
+        self.MainRun()
 
-    def update(self, pokemon, agents, points, mc, timer):
+    def update(self, points, mc, timer):
         """Gets an Update from the Controller and Tells him the status"""
-        if self.running is not False:
-            self.pokemon = pokemon
-            self.agents = agents
-            self.timer = timer
-            self.mc = mc
-            self.points = points
-        return self.running
+        self.pokemon = self.cntrl.pokemons.pokemons
+        self.agents = self.cntrl.agents.agents
+        self.timer = timer
+        self.mc = mc
+        self.points = points
 
     def my_scale(self, data, x=False, y=False):
         """An auxiliary function to calculate Coordinates on the screen given their position"""
@@ -135,6 +133,9 @@ class Gui:
                     click = pygame.mouse.get_pos()
                     if stop.check(click):
                         self.running = False
+
+                # update the data
+                self.updateController()
 
                 # refresh surface and Background
                 self.screen.fill(pygame.Color(screenColor))
@@ -272,6 +273,19 @@ class Gui:
                 rect.center = (x, y)
                 self.screen.blit(pic, rect)
 
+    def updateController(self):
+        if self.firstRun:
+            self.firstRun = False
+            self.cntrl.add_agents([])
+        self.cntrl.update_Agents()
+        self.cntrl.update_Pokemons()
+        list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
+        self.cntrl.insert_edges_to_client(list_tup)
+        self.cntrl.ttl = float(self.cntrl.client.time_to_end())
+        # print(self.cntrl.ttl, self.cntrl.client.get_info())
+        # self.cntrl.client.move()
+        self.update(self.cntrl.ttl, 0, 0)
+
 
 class StopButton:
     """This Class Represent the Stop Button"""
@@ -306,7 +320,7 @@ class fakeAgent:  # TODO remove this
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120)
+    test = Gui(WIDTH, HEIGHT)
 
     # pygame.mainloop(10)
     # t1 = threading.Thread(target=test.MainRun())

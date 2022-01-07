@@ -1,11 +1,10 @@
 from types import SimpleNamespace
 
-import GUI
 from Model.DiGraph import DiGraph
 from Model.GraphAlgo import GraphAlgo
 from client_python.client import Client
-from classes.agents import *
-from classes.pokemons import *
+from Model.classes.agents import *
+from Model.classes.pokemons import *
 import threading
 import json
 
@@ -67,9 +66,10 @@ class controller:
     def determine_next_edges(self):
         edges = []
         for agent in self.agents.agents:
-            nextnode = (agent.src + 1) % self.graph.v_size()
-            tup = (agent.id, nextnode)
-            edges.append(tup)
+            if agent.dest == -1:
+                nextnode = (agent.src + 1) % self.graph.v_size()
+                tup = (agent.id, nextnode)
+                edges.append(tup)
         return edges
         # insert algorithm here
 
@@ -78,23 +78,3 @@ class controller:
             #                            '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}'
             self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ',"next_node_id":' + str(tup[1]) + '}')
 
-
-
-cntrl = controller()
-
-while cntrl.client.is_running():
-
-
-
-    cntrl.update_Agents()
-    cntrl.update_Pokemons()
-    list_tup = cntrl.determine_next_edges()  # list of (agent id, next node)
-    cntrl.insert_edges_to_client(list_tup)
-    cntrl.ttl = float(cntrl.client.time_to_end())
-    # cntrl.update_GUI()  # does it matter if move called after update gui
-    print(cntrl.ttl, cntrl.client.get_info())
-    cntrl.client.move()
-
-
-def close():
-    cntrl.close()
