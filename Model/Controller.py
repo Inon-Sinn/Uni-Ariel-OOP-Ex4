@@ -6,6 +6,7 @@ from Model.GraphAlgo import GraphAlgo
 from client_python.client import Client
 from classes.agents import *
 from classes.pokemons import *
+import threading
 import json
 
 
@@ -27,7 +28,6 @@ class controller:
         self.agents = Agents(self.client.get_agents())  # declare variables
         self.pokemons = Pokemons(self.client.get_pokemons())
         self.ttl = float(self.client.time_to_end())
-        self.gui = GUI.Gui(self.graph, 800, 500, self.ttl, self.pokemons.pokemons, self.agents.agents, False)
         # what is mc
         self.grade = 0
 
@@ -37,21 +37,11 @@ class controller:
 
     def close(self):
         self.client.stop_connection()
-
-    def update_GUI(self):
-        # if gui returns false then close the controler
-        if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc + 1, self.ttl):
-            close()
-
-    # delete later
-    def set_graph_and_algo(self):
-        """
-        self.graphAlgo = GraphAlgo()  # seting new graphalgo
-        info = json.loads(self.client.get_info())  # geting info json
-        graph_filename = "../" + info["GameServer"]["graph"]  # geting filename from info
-        self.graphAlgo.load_from_json(graph_filename)  # loading the graph into algo
-        self.graph = self.graphAlgo.get_graph()  # seting graph
-        """
+    #
+    # def update_GUI(self):
+    #     # if gui returns false then close the controler
+    #     if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc, self.ttl):
+    #         close()
 
     def update_Agents(self):
         agents_json = self.client.get_agents()
@@ -89,20 +79,20 @@ class controller:
             self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ',"next_node_id":' + str(tup[1]) + '}')
 
 
-# *********** main loop ************#
-# declare static controller that can be turned off if user presses stop
-
 
 cntrl = controller()
 
 while cntrl.client.is_running():
+
+
+
     cntrl.update_Agents()
     cntrl.update_Pokemons()
     list_tup = cntrl.determine_next_edges()  # list of (agent id, next node)
     cntrl.insert_edges_to_client(list_tup)
-    cntrl.update_GUI()  # is it matters if move called after update gui
-    ttl = cntrl.client.time_to_end()
-    print(ttl, cntrl.client.get_info())
+    cntrl.ttl = float(cntrl.client.time_to_end())
+    # cntrl.update_GUI()  # does it matter if move called after update gui
+    print(cntrl.ttl, cntrl.client.get_info())
     cntrl.client.move()
 
 
