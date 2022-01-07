@@ -185,7 +185,7 @@ class Gui:
                 pygame.display.update()
 
                 # refresh rate
-                clock.tick(60)
+                clock.tick(120)
 
     def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
         """Draws the Text Box given the right input"""
@@ -277,13 +277,15 @@ class Gui:
         if self.firstRun:
             self.firstRun = False
             self.cntrl.add_agents([])
+            self.cntrl.client.start()
         self.cntrl.update_Agents()
         self.cntrl.update_Pokemons()
         list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
         self.cntrl.insert_edges_to_client(list_tup)
         self.cntrl.ttl = float(self.cntrl.client.time_to_end())
+        self.cntrl.client.get_info()
         # print(self.cntrl.ttl, self.cntrl.client.get_info())
-        # self.cntrl.client.move()
+        self.cntrl.client.move()
         self.update(self.cntrl.ttl, 0, 0)
 
 
@@ -320,7 +322,7 @@ class fakeAgent:  # TODO remove this
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
-    test = Gui(WIDTH, HEIGHT)
+    test = Gui(WIDTH, HEIGHT, debug=True)
 
     # pygame.mainloop(10)
     # t1 = threading.Thread(target=test.MainRun())

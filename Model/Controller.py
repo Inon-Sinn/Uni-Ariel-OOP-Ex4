@@ -36,7 +36,7 @@ class controller:
 
     def close(self):
         self.client.stop_connection()
-    #
+
     # def update_GUI(self):
     #     # if gui returns false then close the controler
     #     if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc, self.ttl):
@@ -58,7 +58,8 @@ class controller:
         #     #                      "{\"id\":0}"
         #     self.client.add_agent('{\"id\":' + starting_node + '}')
 
-        self.client.add_agent("{\"id\":0}")
+        if not self.client.add_agent("{\"id\":0}"):
+            print("agent adding failed")
         # self.client.add_agent("{\"id\":14}")
         # self.client.add_agent("{\"id\":10}")
         # self.client.add_agent("{\"id\":5}")
@@ -76,5 +77,9 @@ class controller:
     def insert_edges_to_client(self, list_tup_id_edge):
         for tup in list_tup_id_edge:
             #                            '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}'
-            self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ',"next_node_id":' + str(tup[1]) + '}')
+            self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ', "next_node_id":' + str(tup[1]) + '}')
+            # self.client.choose_next_edge(
+            #     '{\"agent_id\":' + str(tup[0]) + ', \"next_node_id\":' + str(tup[1]) + '}')
 
+    def move_agents(self):
+        self.client.move()
