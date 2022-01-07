@@ -1,6 +1,9 @@
 import json
 import math
 from typing import List
+import numpy as np
+
+norm = np.linalg.norm
 
 from Model.DiGraph import DiGraph
 from Model.GraphInterface import GraphInterface
@@ -18,7 +21,16 @@ class GraphAlgo:
 
     def closestEdges(self, pos) -> list:
         """Return a sorted list of the edges closest to the pokemon"""
-        return []
+        edges = []
+        for src in self.graph.get_all_v().values():
+            for dest in src.all_out_edges.items():
+                dest_pos = self.graph.getNode(dest[0]).pos
+                p1 = np.array([src.pos[0], src.pos[1]])
+                p2 = np.array([dest_pos[0], dest_pos[1]])
+                p3 = np.array([pos[0], pos[1]])
+                distance = np.abs(norm(np.cross(p2 - p1, p1 - p3))) / norm(p2 - p1)
+                edges.append((src.Id, dest[0], distance))
+        return edges
 
     def edgeByType(self, type, distances) -> tuple:
         """Return the edge closest that adhere to its type -> (src,dest,dist)
