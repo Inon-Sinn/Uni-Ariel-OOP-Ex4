@@ -3,12 +3,12 @@ import math
 from typing import List
 import numpy as np
 
-norm = np.linalg.norm
-
 from Model.DiGraph import DiGraph
 from Model.GraphInterface import GraphInterface
 from queue import Queue
 from Model.MinHeap import MinHeap
+
+norm = np.linalg.norm
 
 
 class GraphAlgo:
@@ -32,7 +32,8 @@ class GraphAlgo:
                 edges.append((src.Id, dest[0], distance))
         return edges
 
-    def edgeByType(self, type, distances) -> tuple:
+    @staticmethod
+    def edgeByType(type, distances) -> tuple:
         """Return the edge closest that adhere to its type -> (src,dest,dist)
         where dist is the distance from the edge"""
         distances = sorted(distances, key=lambda x: x[2])
@@ -62,15 +63,13 @@ class GraphAlgo:
         if edge[2] == 0:
             part = (dist_src_pos / dist_src_dest)
         else:
-            dist = math.sqrt((dist_src_pos*dist_src_pos) - (edge[2]*edge[2]))
+            dist = math.sqrt((dist_src_pos * dist_src_pos) - (edge[2] * edge[2]))
             part = (dist / dist_src_dest)
         return self.graph.getNode[edge[0]].all_out_edges.get(edge[1]) * part
 
-
     def PokemonPlacement(self, type, pos) -> tuple:
         """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
-        edgeDistances = self.closestEdges()
-
+        edgeDistances = self.closestEdges(pos)
         edge = self.edgeByType(type, edgeDistances)
         return edge[0], edge[1], self.distanceOnEdge(edge, pos)
 
@@ -143,11 +142,11 @@ class GraphAlgo:
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         dijkstra = Dijkstra(self.graph)
-        # define distancesFromsrc as distance Of Shortest Paths
-        distancesFromsrc = dijkstra.DijkstraAlgo(id1)
-        if distancesFromsrc.get(id2) is math.inf:
+        # define distances from src as distance Of Shortest Paths
+        distancesFromSrc = dijkstra.DijkstraAlgo(id1)
+        if distancesFromSrc.get(id2) is math.inf:
             return float('inf'), []
-        return distancesFromsrc.get(id2), dijkstra.ShortestPath(id1, id2)
+        return distancesFromSrc.get(id2), dijkstra.ShortestPath(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         if node_lst is None:
@@ -180,7 +179,7 @@ class GraphAlgo:
             node_lst.pop(removeIndex)
             completePath = currentPath.copy()
 
-        # remove dublicates lol
+        # remove duplicates lol
         for i in range(completePath.__len__()):
             if completePath[i] == completePath[i - 1]:
                 completePath.remove(i)
@@ -333,10 +332,10 @@ class Dijkstra:
 
     def ShortestPath(self, src, dest) -> list:
         """
-        An Auxiliray function that Return the shortest path between 2 given nodes in a form of a list
+        An Auxiliary function that Return the shortest path between 2 given nodes in a form of a list
         :param src: the id of the starting node
         :param dest: the id of the end node
-        :return: list - the shotest path between the two nodes (them included)
+        :return: list - the shortest path between the two nodes (them included)
         """
         shortestPath = []
         current = dest
@@ -364,7 +363,7 @@ class Dijkstra:
 
     def MaxWeight(self) -> float:
         Max = 0
-        for weight in self.d.values():
+        for weight in self.distsFromSrc.values():
             if weight > Max:
                 Max = weight
             if weight == math.inf:
