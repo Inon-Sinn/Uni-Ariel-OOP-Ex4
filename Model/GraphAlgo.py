@@ -16,14 +16,34 @@ class GraphAlgo:
     def get_graph(self) -> GraphInterface:
         return self.graph
 
-    def load_from_json_string(self, jsonString : str) -> bool:
+    def closestEdges(self, pos) -> list:
+        """Return a sorted list of the edges closest to the pokemon"""
+        return []
+
+    def edgeByType(self, type, distances) -> tuple:
+        """Return the edge closest that adhere to its type -> (src,dest,dist)
+        where dist is the distance from the edge"""
+        return 0, 0, 0
+
+    def distanceOnEdge(self, egde, pos) -> float:
+        """Given the edge and the pokemon position it calculate its distance
+        by to the weight of the edge in the Graph """
+        return 0
+
+    def PokemonPlacement(self, type, pos) -> tuple:
+        """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
+        edgeDistances = self.closestEdges()
+        edge = self.edgeByType(type, edgeDistances)
+        return edge[0], edge[1], self.distanceOnEdge(edge, pos)
+
+    def load_from_json_string(self, jsonString: str) -> bool:
         graph = DiGraph()
         # add try catch statement for jsonDecodeError
         fromJson = json.loads(jsonString)
         for n in fromJson['Nodes']:
             try:  # In case we are not given a position
-                x,y,z = n['pos'].split(',')
-                pos = (float(x),float(y))
+                x, y, z = n['pos'].split(',')
+                pos = (float(x), float(y))
                 graph.add_node(n['id'], pos)
             except KeyError:
                 graph.add_node(n['id'])
@@ -241,11 +261,11 @@ class Dijkstra:
         # Iterating through all the nodes and setting their weights to infinity
         for node in self.graph.get_all_v().values():
             if node.Id == start_id:
-                self.MinHeap.insert(0,start_id)
+                self.MinHeap.insert(0, start_id)
                 self.distsFromSrc[start_id] = 0
 
             else:
-                self.MinHeap.insert(math.inf,node.Id)
+                self.MinHeap.insert(math.inf, node.Id)
                 self.distsFromSrc[node.Id] = math.inf
 
             self.prev[node.Id] = None
@@ -285,7 +305,7 @@ class Dijkstra:
         if self.distsFromSrc[dest] is math.inf:
             return None
         while current != src and current is not None:
-            shortestPath.insert(0,current)
+            shortestPath.insert(0, current)
             try:
                 current = self.prev[current]
             except KeyError:
