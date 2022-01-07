@@ -1,6 +1,6 @@
 from pygame import gfxdraw
 import pygame
-
+import os
 from Model.GraphAlgo import GraphAlgo
 from Model.classes.pokemons import Pokemon
 
@@ -52,7 +52,9 @@ class Gui:
         self.graph = graph
         self.debug = debug
         self.running = True
-
+        print(os.getcwd())
+        os.chdir('../')
+        print(os.getcwd())
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
         self.margin = self.screen.get_height() / 10
@@ -168,7 +170,7 @@ class Gui:
 
                 # draw Pokemon
                 PokemonNodeRadius = 0.055 * self.screen.get_height()
-                self.drawPokemon(PokemonNodeRadius,PokemonColor, PokemonTextColor, pokemonDebugRadius)
+                self.drawPokemon(PokemonNodeRadius, PokemonColor, PokemonTextColor, pokemonDebugRadius)
 
                 # draw Agents
                 AgentsSize = 0.055 * self.screen.get_height()
@@ -227,7 +229,7 @@ class Gui:
             if self.debug == 0:
                 # Draw the pokemon
                 if 0 < pok.value < 15:
-                    filename = "Images/pokemon{}.png".format(pok.value)
+                    filename = "Images/pokemon{}.png".format(int(pok.value))
                 else:
                     filename = "Images/pokemon3.png"
                 pic = pygame.image.load(filename)
@@ -239,7 +241,8 @@ class Gui:
                 self.screen.blit(pic, rect)
             else:
                 pygame.gfxdraw.aacircle(self.screen, int(x), int(y), pokemonDebugRadius, pygame.Color(PokemonColor))
-                pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), pokemonDebugRadius, pygame.Color(PokemonColor))
+                pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), pokemonDebugRadius,
+                                             pygame.Color(PokemonColor))
                 # Write the Id
                 title = "{},{}".format(pok.type, pok.value)
                 id_srf = FONT.render(title, True, pygame.Color(PokemonTextColor))

@@ -12,21 +12,29 @@ class GraphAlgo:
 
     def __init__(self):
         self.graph = None
-        self.linearEq = self.CalculateLinearEquation()
 
-    def get_graph(self) -> GraphInterface: # TODO marked
+    def get_graph(self) -> GraphInterface:
         return self.graph
 
-    def CalculateLinearEquation(self):
-        return []
+    def load_from_json_string(self, jsonString : str) -> bool:
+        graph = DiGraph()
+        # add try catch statement for jsonDecodeError
+        fromJson = json.loads(jsonString)
+        for n in fromJson['Nodes']:
+            try:  # In case we are not given a position
+                x,y,z = n['pos'].split(',')
+                pos = (float(x),float(y))
+                graph.add_node(n['id'], pos)
+            except KeyError:
+                graph.add_node(n['id'])
+        for e in fromJson['Edges']:
+            graph.add_edge(e['src'], e['dest'], e['w'])
 
-    def getClosestNode(self, type, pos):
-        pass
+        self.graph = graph
 
-    def PointsDistanceFromLine(self):
-        pass
+        return True
 
-    def load_from_json(self, file_name: str) -> bool: # TODO marked
+    def load_from_json(self, file_name: str) -> bool:
         graph = DiGraph()
         try:  # Checks if the file even Exists
             with open(file_name, "r+") as f:
@@ -75,7 +83,7 @@ class GraphAlgo:
         except TypeError:  # Should not happen but in case the Graph itself has a problem
             return False
 
-    def shortest_path(self, id1: int, id2: int) -> (float, list): # TODO marked
+    def shortest_path(self, id1: int, id2: int) -> (float, list):
         dijkstra = Dijkstra(self.graph)
         # define distancesFromsrc as distance Of Shortest Paths
         distancesFromsrc = dijkstra.DijkstraAlgo(id1)
@@ -161,8 +169,6 @@ class GraphAlgo:
         return Reversed
 
 
-
-
 class BFS:
     """This Class implements the BFS Algorithm,"""
 
@@ -217,7 +223,7 @@ class BFS:
         return True
 
 
-class Dijkstra: # TODO marked
+class Dijkstra:
     """This Class implements the Dijkstra Algorithm"""
 
     def __init__(self, graph):
@@ -287,9 +293,20 @@ class Dijkstra: # TODO marked
         shortestPath.insert(0, src)
         return shortestPath
 
+        # Q = Queue(0)
+        # Q.put(dest)
+        # cur = dest
+        # while self.prev.get(cur) is not src:
+        #     Q.put(self.prev.get(cur))
+        #     cur = self.prev.get(cur)
+        # path = [src]
+        # while not Q.empty():
+        #     path.append(Q.get_nowait())
+        # return path
+
     def MaxWeight(self) -> float:
         Max = 0
-        for weight in self.distsFromSrc.values():
+        for weight in self.d.values():
             if weight > Max:
                 Max = weight
             if weight == math.inf:

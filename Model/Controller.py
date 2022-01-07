@@ -1,5 +1,6 @@
 from types import SimpleNamespace
 
+import GUI
 from Model.DiGraph import DiGraph
 from Model.GraphAlgo import GraphAlgo
 from client_python.client import Client
@@ -17,14 +18,18 @@ class controller:
         self.client = Client()
         self.client.start_connection(ip, port)
 
-        self.graph  # declare variables
-        self.graphAlgo
-        self.set_graph_and_algo()
+        # declare variables
+        self.graphAlgo = GraphAlgo()
+        self.graphAlgo.load_from_json_string(self.client.get_graph())
+        self.graph = self.graphAlgo.graph
 
-        self.agents  # declare variables
-        self.pokemons
-        self.update_Pokemons()
-        self.update_Agents()
+        self.add_agents([1, 2, 3, 4])
+        self.agents = Agents(self.client.get_agents())  # declare variables
+        self.pokemons = Pokemons(self.client.get_pokemons())
+        self.ttl = float(self.client.time_to_end())
+        self.gui = GUI.Gui(self.graph, 800, 500, self.ttl, self.pokemons.pokemons, self.agents.agents, False)
+        # what is mc
+        self.grade = 0
 
     def find_next_route(self):
         # implement algorithm here
@@ -34,18 +39,19 @@ class controller:
         self.client.stop_connection()
 
     def update_GUI(self):
-        # get parameters here and pass them to gui
-        pass
+        # if gui returns false then close the controler
+        if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc + 1, self.ttl):
+            close()
 
+    # delete later
     def set_graph_and_algo(self):
-        graph_json = self.client.get_graph()  # geting json of graph
+        """
         self.graphAlgo = GraphAlgo()  # seting new graphalgo
         info = json.loads(self.client.get_info())  # geting info json
         graph_filename = "../" + info["GameServer"]["graph"]  # geting filename from info
         self.graphAlgo.load_from_json(graph_filename)  # loading the graph into algo
         self.graph = self.graphAlgo.get_graph()  # seting graph
-        if self.graphAlgo.get_graph() is None:  # sanity check
-            print('no graph found')
+        """
 
     def update_Agents(self):
         agents_json = self.client.get_agents()
@@ -56,39 +62,49 @@ class controller:
         self.pokemons = Pokemons(pokemons_json)
 
     def add_agents(self, list_of_starting_nodes):
-        if len(list_of_starting_nodes) > 4:
-            print("cant insert more than 4 agents")
-        for starting_node in list_of_starting_nodes:
-            self.client.add_agent("{\"id\":" + starting_node + "}")
-        # self.client.add_agent("{\"id\":0}")
+        # insert closest node to pokemon algorithm here
+        # if len(list_of_starting_nodes) > 4:
+        #     print("cant insert more than 4 agents")
+        # for starting_node in list_of_starting_nodes:
+        #     #                      "{\"id\":0}"
+        #     self.client.add_agent('{\"id\":' + starting_node + '}')
+
+        self.client.add_agent("{\"id\":0}")
         # self.client.add_agent("{\"id\":14}")
         # self.client.add_agent("{\"id\":10}")
         # self.client.add_agent("{\"id\":5}")
 
-    def set_next_edge(self, dict_id_to_edge):
-        for id in dict_id_to_edge.keys():
-            # insert algorithm here
-            pass
+    def determine_next_edges(self):
+        edges = []
+        for agent in self.agents.agents:
+            nextnode = (agent.src + 1) % self.graph.v_size()
+            tup = (agent.id, nextnode)
+            edges.append(tup)
+        return edges
+        # insert algorithm here
 
-
-        self.client.move()
+    def insert_edges_to_client(self, list_tup_id_edge):
+        for tup in list_tup_id_edge:
+            #                            '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}'
+            self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ',"next_node_id":' + str(tup[1]) + '}')
 
 
 # *********** main loop ************#
 # declare static controller that can be turned off if user presses stop
+
+
 cntrl = controller()
-
-
-def close():
-    cntrl.close()
-
 
 while cntrl.client.is_running():
     cntrl.update_Agents()
     cntrl.update_Pokemons()
+    list_tup = cntrl.determine_next_edges()  # list of (agent id, next node)
+    cntrl.insert_edges_to_client(list_tup)
+    cntrl.update_GUI()  # is it matters if move called after update gui
+    ttl = cntrl.client.time_to_end()
+    print(ttl, cntrl.client.get_info())
+    cntrl.client.move()
 
-    # insert algorithm here
 
-    cntrl.set_next_edge()  # insert edges here
-
-
+def close():
+    cntrl.close()
