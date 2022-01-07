@@ -35,16 +35,40 @@ class GraphAlgo:
     def edgeByType(self, type, distances) -> tuple:
         """Return the edge closest that adhere to its type -> (src,dest,dist)
         where dist is the distance from the edge"""
-        return 0, 0, 0
+        distances = sorted(distances, key=lambda x: x[2])
+        edge = 0, 0, math.inf  # in case that there is no edge
+        while len(distances) > 0:
+            curEdge = distances.pop(0)
+            if curEdge[0] < curEdge[1] and type == 1:
+                edge = curEdge
+                break
+            if curEdge[1] < curEdge[0] and type == -1:
+                edge = curEdge
+                break
+        return edge
 
-    def distanceOnEdge(self, egde, pos) -> float:
+    def distanceOnEdge(self, edge, pos) -> float:
         """Given the edge and the pokemon position it calculate its distance
         by to the weight of the edge in the Graph """
+        # Build the points
+        src_pos = self.graph.getNode(edge[0]).pos
+        pt_src = np.array([src_pos[0], src_pos[1]])
+        dest_pos = self.graph.getNode(edge[1]).pos
+        pt_dest = np.array([dest_pos[0], dest_pos[1]])
+        pt_pok = np.array([pos[0], pos[1]])
+
+        dist_src_pos = np.abs(norm(pt_src - pt_pok))
+        dist_src_dest = np.abs(norm(pt_src - pt_dest))
+        if edge[2] == 0:
+            return self.graph.getNode[edge[0]].all_out_edges.get(edge[1]) * (dist_src_pos / dist_src_dest)
+        else:
+            print("h")
         return 0
 
     def PokemonPlacement(self, type, pos) -> tuple:
         """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
         edgeDistances = self.closestEdges()
+
         edge = self.edgeByType(type, edgeDistances)
         return edge[0], edge[1], self.distanceOnEdge(edge, pos)
 
