@@ -60,10 +60,12 @@ class GraphAlgo:
         dist_src_pos = np.abs(norm(pt_src - pt_pok))
         dist_src_dest = np.abs(norm(pt_src - pt_dest))
         if edge[2] == 0:
-            return self.graph.getNode[edge[0]].all_out_edges.get(edge[1]) * (dist_src_pos / dist_src_dest)
+            part = (dist_src_pos / dist_src_dest)
         else:
-            print("h")
-        return 0
+            dist = math.sqrt((dist_src_pos*dist_src_pos) - (edge[2]*edge[2]))
+            part = (dist / dist_src_dest)
+        return self.graph.getNode[edge[0]].all_out_edges.get(edge[1]) * part
+
 
     def PokemonPlacement(self, type, pos) -> tuple:
         """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
