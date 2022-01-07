@@ -1,11 +1,14 @@
 import json
 import math
 from typing import List
+import numpy as np
 
 from Model.DiGraph import DiGraph
 from Model.GraphInterface import GraphInterface
 from queue import Queue
 from Model.MinHeap import MinHeap
+
+norm = np.linalg.norm
 
 
 class GraphAlgo:
@@ -16,14 +19,68 @@ class GraphAlgo:
     def get_graph(self) -> GraphInterface:
         return self.graph
 
-    def load_from_json_string(self, jsonString : str) -> bool:
+    def closestEdges(self, pos) -> list:
+        """Return a sorted list of the edges closest to the pokemon"""
+        edges = []
+        for src in self.graph.get_all_v().values():
+            for dest in src.all_out_edges.items():
+                dest_pos = self.graph.getNode(dest[0]).pos
+                p1 = np.array([src.pos[0], src.pos[1]])
+                p2 = np.array([dest_pos[0], dest_pos[1]])
+                p3 = np.array([pos[0], pos[1]])
+                distance = np.abs(norm(np.cross(p2 - p1, p1 - p3))) / norm(p2 - p1)
+                edges.append((src.Id, dest[0], distance))
+        return edges
+
+    @staticmethod
+    def edgeByType(type, distances) -> tuple:
+        """Return the edge closest that adhere to its type -> (src,dest,dist)
+        where dist is the distance from the edge"""
+        distances = sorted(distances, key=lambda x: x[2])
+        edge = 0, 0, math.inf  # in case that there is no edge
+        while len(distances) > 0:
+            curEdge = distances.pop(0)
+            if curEdge[0] < curEdge[1] and type == 1:
+                edge = curEdge
+                break
+            if curEdge[1] < curEdge[0] and type == -1:
+                edge = curEdge
+                break
+        return edge
+
+    def distanceOnEdge(self, edge, pos) -> float:
+        """Given the edge and the pokemon position it calculate its distance
+        by to the weight of the edge in the Graph """
+        # Build the points
+        src_pos = self.graph.getNode(edge[0]).pos
+        pt_src = np.array([src_pos[0], src_pos[1]])
+        dest_pos = self.graph.getNode(edge[1]).pos
+        pt_dest = np.array([dest_pos[0], dest_pos[1]])
+        pt_pok = np.array([pos[0], pos[1]])
+
+        dist_src_pos = np.abs(norm(pt_src - pt_pok))
+        dist_src_dest = np.abs(norm(pt_src - pt_dest))
+        if edge[2] == 0:
+            part = (dist_src_pos / dist_src_dest)
+        else:
+            dist = math.sqrt((dist_src_pos * dist_src_pos) - (edge[2] * edge[2]))
+            part = (dist / dist_src_dest)
+        return self.graph.getNode[edge[0]].all_out_edges.get(edge[1]) * part
+
+    def PokemonPlacement(self, type, pos) -> tuple:
+        """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
+        edgeDistances = self.closestEdges(pos)
+        edge = self.edgeByType(type, edgeDistances)
+        return edge[0], edge[1], self.distanceOnEdge(edge, pos)
+
+    def load_from_json_string(self, jsonString: str) -> bool:
         graph = DiGraph()
         # add try catch statement for jsonDecodeError
         fromJson = json.loads(jsonString)
         for n in fromJson['Nodes']:
             try:  # In case we are not given a position
-                x,y,z = n['pos'].split(',')
-                pos = (float(x),float(y))
+                x, y, z = n['pos'].split(',')
+                pos = (float(x), float(y))
                 graph.add_node(n['id'], pos)
             except KeyError:
                 graph.add_node(n['id'])
@@ -85,11 +142,11 @@ class GraphAlgo:
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
         dijkstra = Dijkstra(self.graph)
-        # define distancesFromsrc as distance Of Shortest Paths
-        distancesFromsrc = dijkstra.DijkstraAlgo(id1)
-        if distancesFromsrc.get(id2) is math.inf:
+        # define distances from src as distance Of Shortest Paths
+        distancesFromSrc = dijkstra.DijkstraAlgo(id1)
+        if distancesFromSrc.get(id2) is math.inf:
             return float('inf'), []
-        return distancesFromsrc.get(id2), dijkstra.ShortestPath(id1, id2)
+        return distancesFromSrc.get(id2), dijkstra.ShortestPath(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
         if node_lst is None:
@@ -122,7 +179,7 @@ class GraphAlgo:
             node_lst.pop(removeIndex)
             completePath = currentPath.copy()
 
-        # remove dublicates lol
+        # remove duplicates lol
         for i in range(completePath.__len__()):
             if completePath[i] == completePath[i - 1]:
                 completePath.remove(i)
@@ -241,11 +298,11 @@ class Dijkstra:
         # Iterating through all the nodes and setting their weights to infinity
         for node in self.graph.get_all_v().values():
             if node.Id == start_id:
-                self.MinHeap.insert(0,start_id)
+                self.MinHeap.insert(0, start_id)
                 self.distsFromSrc[start_id] = 0
 
             else:
-                self.MinHeap.insert(math.inf,node.Id)
+                self.MinHeap.insert(math.inf, node.Id)
                 self.distsFromSrc[node.Id] = math.inf
 
             self.prev[node.Id] = None
@@ -275,17 +332,17 @@ class Dijkstra:
 
     def ShortestPath(self, src, dest) -> list:
         """
-        An Auxiliray function that Return the shortest path between 2 given nodes in a form of a list
+        An Auxiliary function that Return the shortest path between 2 given nodes in a form of a list
         :param src: the id of the starting node
         :param dest: the id of the end node
-        :return: list - the shotest path between the two nodes (them included)
+        :return: list - the shortest path between the two nodes (them included)
         """
         shortestPath = []
         current = dest
         if self.distsFromSrc[dest] is math.inf:
             return None
         while current != src and current is not None:
-            shortestPath.insert(0,current)
+            shortestPath.insert(0, current)
             try:
                 current = self.prev[current]
             except KeyError:
@@ -306,7 +363,7 @@ class Dijkstra:
 
     def MaxWeight(self) -> float:
         Max = 0
-        for weight in self.d.values():
+        for weight in self.distsFromSrc.values():
             if weight > Max:
                 Max = weight
             if weight == math.inf:
