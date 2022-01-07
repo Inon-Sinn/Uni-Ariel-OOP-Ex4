@@ -4,6 +4,9 @@ import os
 from Model.GraphAlgo import GraphAlgo
 from Model.classes.pokemons import Pokemon
 
+import threading
+import time
+
 pygame.init()
 
 pygame.font.init()
@@ -52,9 +55,10 @@ class Gui:
         self.graph = graph
         self.debug = debug
         self.running = True
-        print(os.getcwd())
-        os.chdir('../')
-        print(os.getcwd())
+        # print(os.getcwd())
+        # os.chdir('../')
+        # print(os.getcwd())
+
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
         self.margin = self.screen.get_height() / 10
@@ -67,7 +71,7 @@ class Gui:
         self.max_y = max(self.graph.get_all_v().values(), key=lambda n: n.pos[1]).pos[1]
 
         # Run the Gui
-        self.MainRun()
+        # self.MainRun()
 
     def update(self, pokemon, agents, points, mc, timer):
         """Gets an Update from the Controller and Tells him the status"""
@@ -302,14 +306,28 @@ class fakeAgent:  # TODO remove this
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
+    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120)
 
-    pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
-    pokemon1 = Pokemon(16, -1, pos1)
-    pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
-    pokemon2 = Pokemon(1, 1, pos2)
-    pokemon = [pokemon1, pokemon2]
-
-    agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
-    agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
-    agents = [agent1, agent2]
-    test = Gui(algo.get_graph(), WIDTH, HEIGHT, 120, pokemon, agents, debug=False)
+    # pygame.mainloop(10)
+    # t1 = threading.Thread(target=test.MainRun())
+    # t1.setName("First Thread")
+    # t1.start()
+    #
+    #
+    #
+    # pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
+    # pokemon1 = Pokemon(16, -1, pos1)
+    # pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
+    # pokemon2 = Pokemon(1, 1, pos2)
+    # pokemon = [pokemon1, pokemon2]
+    #
+    # agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
+    # agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
+    # agents = [agent1, agent2]
+    #
+    # # t2 = threading.Thread(target=test.update(), args=[pokemon,agents,100,10,150])
+    # # t2.setName("Second Thread")
+    # # time.sleep(1)
+    # # t2.start()
+    # test.pokemon = pokemon
+    # test.update(pokemon,agents,100,10,150)
