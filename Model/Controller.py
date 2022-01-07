@@ -23,10 +23,13 @@ class controller:
         self.graphAlgo.load_from_json_string(self.client.get_graph())
         self.graph = self.graphAlgo.graph
 
-        self.add_agents([1,2,3,4])
+        self.add_agents([1, 2, 3, 4])
         self.agents = Agents(self.client.get_agents())  # declare variables
         self.pokemons = Pokemons(self.client.get_pokemons())
-        self.gui = GUI.Gui()
+        self.ttl = float(self.client.time_to_end())
+        self.gui = GUI.Gui(self.graph, 800, 500, self.ttl, self.pokemons.pokemons, self.agents.agents, False)
+        # what is mc
+        self.grade = 0
 
     def find_next_route(self):
         # implement algorithm here
@@ -36,10 +39,9 @@ class controller:
         self.client.stop_connection()
 
     def update_GUI(self):
-        # get parameters here and pass them to gui
-
-
-        pass
+        # if gui returns false then close the controler
+        if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc + 1, self.ttl):
+            close()
 
     # delete later
     def set_graph_and_algo(self):
@@ -89,12 +91,9 @@ class controller:
 
 # *********** main loop ************#
 # declare static controller that can be turned off if user presses stop
+
+
 cntrl = controller()
-
-
-def close():
-    cntrl.close()
-
 
 while cntrl.client.is_running():
     cntrl.update_Agents()
@@ -105,3 +104,7 @@ while cntrl.client.is_running():
     ttl = cntrl.client.time_to_end()
     print(ttl, cntrl.client.get_info())
     cntrl.client.move()
+
+
+def close():
+    cntrl.close()
