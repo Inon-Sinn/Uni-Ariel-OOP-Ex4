@@ -12,8 +12,10 @@ import json
 class controller:
 
     def __init__(self):
+
         ip = '127.0.0.1'
         port = 6666
+
         # start connection
         self.client = Client()
         self.client.start_connection(ip, port)
@@ -23,12 +25,11 @@ class controller:
         self.graphAlgo.load_from_json_string(self.client.get_graph())
         self.graph = self.graphAlgo.graph
 
-        self.add_agents([1, 2, 3, 4])
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
         self.pokemons = Pokemons(self.client.get_pokemons())
 
-        self.pokemon_for_agent = {} # dict of agent.id : pokemon.pos
-        self.paths_for_agents = {} # dict of agent.id : path to pokemon
+        self.pokemon_for_agent = {}  # dict of agent.id : pokemon.pos
+        self.paths_for_agents = {}  # dict of agent.id : path to pokemon
 
         self.ttl = float(self.client.time_to_end())
         self.grade = 0
@@ -54,6 +55,8 @@ class controller:
         self.pokemons = Pokemons(pokemons_json)
 
     def add_agents(self, list_of_starting_nodes):
+
+
         # insert closest node to pokemon algorithm here
         # if len(list_of_starting_nodes) > 4:
         #     print("cant insert more than 4 agents")

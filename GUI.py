@@ -259,7 +259,6 @@ class Gui:
                 self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
 
     def drawAgent(self, AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize):
-        # TODO maybe print the value of the agents in Debug mode
         """Draw the Agents on the Screen"""
         for agent in self.agents:
             x = self.my_scale(agent.pos[0], True, False)
@@ -268,7 +267,7 @@ class Gui:
                 pygame.gfxdraw.aacircle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 # Write the Id
-                title = "{},{}".format(agent.id, agent.value)
+                title = "{},{},{}".format(agent.id, agent.value, agent.speed)
                 id_srf = FONT.render(title, True, pygame.Color(AgentIdColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
             else:
