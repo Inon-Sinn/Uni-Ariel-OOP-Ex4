@@ -95,7 +95,7 @@ class Gui:
         NodeIdColor = (255, 255, 255)  # white
         edgeColor = (120, 81, 185)  # #7851B9
         AgentColor = (0, 255, 255)
-        AgentIdColor = (0, 0, 0)
+        AgentIdColor = (255, 255, 255)
         ButtonTitleColor = (255, 255, 255)
         ButtonColor = (0, 48, 142)
         boxOutlineColor = (0, 0, 0)
@@ -114,10 +114,14 @@ class Gui:
         # Upper Margin
         stop = StopButton(80, 100, ButtonTitleColor)
 
-        # Start the Game
-        self.cntrl.add_paths_to_agents()
+        # Calculate the next position the agent should take
+        # self.cntrl.add_paths_to_agents()
+
         # get the time of arrival
+
+        # Start the Game
         self.cntrl.client.start()
+
         while True:
             for gui_event in pygame.event.get():
                 if gui_event.type == pygame.QUIT:

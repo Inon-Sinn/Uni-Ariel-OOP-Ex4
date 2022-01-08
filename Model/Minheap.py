@@ -1,4 +1,4 @@
-from DiGraph import Node
+from Model.DiGraph import Node
 
 
 class MinHeap:
