@@ -1,5 +1,4 @@
 from unittest import TestCase
-import fucked_graph_algo
 from Controller import controller
 
 class Test_Graphalgo(TestCase):
@@ -14,6 +13,7 @@ class Test_Graphalgo(TestCase):
             self.cntrl.update_Pokemons()
             self.cntrl.add_paths_to_agents()
             print(self.cntrl.pokemon_for_agent)
+            print(self.cntrl.client.get_agents())
             list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
             self.cntrl.insert_edges_to_client(list_tup)
             self.cntrl.ttl = float(self.cntrl.client.time_to_end())

@@ -11,7 +11,7 @@ from Model.Minheap import MinHeap
 norm = np.linalg.norm
 
 
-class GraphAlgo(GraphAlgoInterface):
+class GraphAlgo(GraphInterface):
     """This Class Represents the Algorithms we can Run on the Graph we implemented,
     This class implements the GraphAlgo Interface given in the Assignment"""
 
