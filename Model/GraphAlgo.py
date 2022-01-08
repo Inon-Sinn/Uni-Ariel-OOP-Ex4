@@ -78,7 +78,21 @@ class GraphAlgo:
         """ receiving agents [] and pokemons [] and agent_to_pokemon{agent.id,(path[], pok(x,y)}
          and returns {agent.id,(path[], pok(x,y)}
         """
+        d = {}
+        paths = []  # (weight, path, agent.id, pok.pos)
 
+        for agent in agents:
+            for pokemon in pokemons:
+                pok_root = self.PokemonPlacement(pokemon.type, pokemon.pos)[0]
+                weight, path = self.shortest_path(agent.dest, pok_root)
+                paths.append(weight, path, agent.id, pokemon.pos)
+        # note that sorting might improve run time
+        for agent in agents:
+            weight = math.inf
+            for i in range(paths.__len__()):
+                if paths[i][2] == agent.id and paths[i][0] < weight:
+                    d[agent.id] = (paths[i][1], paths[i][3])
+        return d  # {agent.id : (path, pokemon pos) }
 
     def check_if_pokemon_occupied(self, agents: list, agent_to_pokemon: dict, pokemon_pos: tuple) -> bool:
         for agent in agents:
