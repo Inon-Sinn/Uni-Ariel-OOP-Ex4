@@ -93,7 +93,7 @@ class Gui:
 
         # variables
         pygame.display.set_caption('THIS CANT BE!! he has power level of 5000!!!')
-        background = pygame.image.load("Images/pokemon_Map.jpg")
+        background = pygame.image.load("Images/pokemon_Map.jpg").convert_alpha()
         BoxWidth = 8
         hd = 10  # Boxes Height divider
         bHdP = 4  # boxed height divider portion
@@ -136,26 +136,31 @@ class Gui:
 
             # update the data
             self.updateController()
+
             # refresh surface and Background
             self.screen.fill(pygame.Color(screenColor))
             background = pygame.transform.scale(background, (self.screen.get_width(), self.screen.get_height()))
             rect = background.get_rect()
             self.screen.blit(background, rect)
             self.margin = max(self.screen.get_height() / 10, 50)
+
             # Render the Button
             stop.render(self.screen, ButtonColor, (0, self.margin / hd),
                         (self.screen.get_width() * (1 / BoxWidth), self.margin * (bHdP / hd)))
             draw_rect_outline(self.screen, stop.rect, boxOutlineColor, BoxOutlineWidth)
+
             # Timer
             pos = (self.screen.get_width() * (1 / BoxWidth) + 1, self.margin / hd)
             text = " Time: {}s ".format(self.timer)
             self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
                              TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
+
             # Move Counter
             pos = (self.screen.get_width() * (2 / BoxWidth) + 2, self.margin / hd)
             text = " Moves: {} ".format(self.mc)
             self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
                              TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
+
             # Point Counter
             pos = (self.screen.get_width() * (3 / BoxWidth) + 3, self.margin / hd)
             text = " Points: {} ".format(self.points)
@@ -173,6 +178,24 @@ class Gui:
             self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
             # update screen changes
             pygame.display.update()
+
+            # draw Edges
+            self.drawEdges(edgeColor, edgeWidth)
+
+            # draw Nodes
+            self.drawNodes(NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor)
+
+            # draw Pokemon
+            PokemonNodeRadius = 0.055 * self.screen.get_height()
+            self.drawPokemon(PokemonNodeRadius, PokemonColor, PokemonTextColor, pokemonDebugRadius)
+
+            # draw Agents
+            AgentsSize = 0.055 * self.screen.get_height()
+            self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
+
+            # update screen changes
+            pygame.display.update()
+
             # refresh rate
             clock.tick(120)
 
@@ -226,7 +249,7 @@ class Gui:
                     filename = "Images/pokemon{}.png".format(int(pok.value))
                 else:
                     filename = "Images/pokemon3.png"
-                pic = pygame.image.load(filename)
+                pic = pygame.image.load(filename).convert_alpha()
                 if pok.type == -1:
                     pic = pygame.transform.flip(pic, True, False)
                 pic = pygame.transform.scale(pic, (PokemonNodeRadius * 2, PokemonNodeRadius * 2))
@@ -252,11 +275,12 @@ class Gui:
                 pygame.gfxdraw.aacircle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 # Write the Id
-                id_srf = FONT.render(str(agent.id), True, pygame.Color(AgentIdColor))
+                title = "{},{}".format(agent.id,agent.value)
+                id_srf = FONT.render(title, True, pygame.Color(AgentIdColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
             else:
                 filename = "Images/trainer{}.png".format(agent.id % 5)
-                pic = pygame.image.load(filename)
+                pic = pygame.image.load(filename).convert_alpha()
                 pic = pygame.transform.scale(pic, (AgentsSize * 1.6, AgentsSize * 3.1))
                 rect = pic.get_rect()
                 rect.center = (x, y)
@@ -273,11 +297,12 @@ class Gui:
         self.cntrl.insert_edges_to_client(list_tup)
         self.cntrl.ttl = float(self.cntrl.client.time_to_end())
         self.cntrl.client.get_info()
-        print(self.cntrl.ttl, self.cntrl.client.get_info())
-        print (self.timer)
-        if self.timer % 1000 == 0:
+
+        # print(self.cntrl.ttl, self.cntrl.client.get_info())
+        if self.timer > int(self.cntrl.ttl / 1000):
             self.cntrl.client.move()
-        self.update(0, 0, self.cntrl.ttl)
+        self.update(0, 0, int(self.cntrl.ttl/1000))
+
 
 
 class StopButton:
