@@ -75,28 +75,10 @@ class GraphAlgo:
         return edge[0], edge[1], self.distanceOnEdge(edge, pos)
 
     def best_Path_foreach_agent(self, agents: list, pokemons: list, agent_to_pokemon: dict) -> dict:
-        """ receiving list of agents and list of pokemons and dictionary for occupation of pokemon
-        and returns dictionary for each agent which path to go and the path's length.
+        """ receiving agents [] and pokemons [] and agent_to_pokemon{agent.id,(path[], pok(x,y)}
+         and returns {agent.id,(path[], pok(x,y)}
         """
-        paths_for_agents = {}
-        # for each pokemon checks all agents to see who's the best to go to that pokemon
-        for pokemon in pokemons:
 
-            if self.check_if_pokemon_occupied(agents, agent_to_pokemon, pokemon.pos):
-                continue
-            # pokemon place
-            src_pok, dest_pok, dist_pok = self.PokemonPlacement(pokemon.type, pokemon.pos)
-
-            for agent in agents: # check if agent is not occupied
-                if agent_to_pokemon.get(agent.id) is None:
-                    distance_to_walk, path = self.shortest_path(agent.src, src_pok) # short path and dist to pok's node
-
-                    if paths_for_agents.get(agent.id) is None: # if not put yet in the paths_for_agents then put
-                        paths_for_agents[agent.id] = (path, distance_to_walk)
-
-                    elif paths_for_agents[agent.id][1] > distance_to_walk:  # if exists inside paths_for_agents
-                        paths_for_agents[agent.id] = (path, distance_to_walk)
-            return paths_for_agents
 
     def check_if_pokemon_occupied(self, agents: list, agent_to_pokemon: dict, pokemon_pos: tuple) -> bool:
         for agent in agents:
