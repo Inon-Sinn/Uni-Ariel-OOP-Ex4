@@ -1,6 +1,6 @@
 import random
 
-from GraphInterface import GraphInterface
+from Model.GraphInterface import GraphInterface
 
 
 class DiGraph(GraphInterface):

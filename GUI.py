@@ -115,7 +115,8 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        self.cntrl.add_paths_to_agents()
+        #self.cntrl.add_paths_to_agents()
+
         # get the time of arrival
         self.cntrl.client.start()
         while True:
@@ -128,7 +129,18 @@ class Gui:
                     click = pygame.mouse.get_pos()
                     if stop.check(click):
                         self.running = False
+            self.cntrl.update_Agents()
+            self.cntrl.update_Pokemons()
+            #list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
+            #self.cntrl.insert_edges_to_client(list_tup)
+            self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(4) + '}')
+            self.cntrl.ttl = float(self.cntrl.client.time_to_end())
+            self.cntrl.client.get_info()
 
+            # print(self.cntrl.ttl, self.cntrl.client.get_info())
+            # if self.timer > int(self.cntrl.ttl / 1000):
+            self.cntrl.client.move()
+            self.update(0, 0, int(self.cntrl.ttl / 1000))
             # update the data
             # self.updateController()
 
