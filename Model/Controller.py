@@ -86,7 +86,7 @@ class controller:
         edges = []
         for agent in self.agents.agents:
             if agent.dest == -1:
-                if self.pokemon_for_agent[agent.id][0].__len__() != 0:
+                if len(self.pokemon_for_agent[agent.id][0]) != 0:
                     nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
                     tup = (agent.id, nextnode)
                     edges.append(tup)
