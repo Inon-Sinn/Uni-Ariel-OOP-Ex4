@@ -115,9 +115,9 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        self.cntrl.client.start()
         self.cntrl.add_paths_to_agents()
-
+        # get the time of arrival
+        self.cntrl.client.start()
         while True:
             for gui_event in pygame.event.get():
                 if gui_event.type == pygame.QUIT:
