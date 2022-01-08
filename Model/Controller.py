@@ -28,8 +28,8 @@ class controller:
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
         self.pokemons = Pokemons(self.client.get_pokemons())
 
-        self.pokemon_for_agent = {}  # dict of agent.id : pokemon.pos
-        self.paths_for_agents = {}  # dict of agent.id : path to pokemon
+        self.pokemon_for_agent = {} # dict of agent.id : ( path to pokemon,pokemon.pos)
+        self.paths_for_agents = {} # dict of agent.id : path to pokemon
 
         self.ttl = float(self.client.time_to_end())
         self.grade = 0
@@ -71,17 +71,12 @@ class controller:
         # self.client.add_agent("{\"id\":5}")
 
     def determine_next_edges(self):
-
         edges = []
-
-
         for agent in self.agents.agents:
             if agent.dest == -1:
-
-                pass
-                # nextnode = (agent.src - 1) % self.graph.v_size()
-                # tup = (agent.id, nextnode)
-                # edges.append(tup)
+                nextnode = (agent.src - 1) % self.graph.v_size()
+                tup = (agent.id, nextnode)
+                edges.append(tup)
         return edges
         # insert algorithm here
 
