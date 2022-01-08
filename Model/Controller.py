@@ -29,6 +29,8 @@ class controller:
         self.pokemons = Pokemons(self.client.get_pokemons())
         self.add_agents()
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
+        for agent in self.agents.agents:
+            self.pokemon_for_agent[agent.id] = ([], -1)
 
         self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos)}
 
