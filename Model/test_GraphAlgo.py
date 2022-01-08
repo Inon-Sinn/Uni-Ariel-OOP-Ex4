@@ -12,7 +12,9 @@ class Test_Graphalgo(TestCase):
             self.cntrl.update_Agents()
             self.cntrl.update_Pokemons()
             for agent in self.cntrl.agents.agents:
-                if (len(self.cntrl.pokemon_for_agent[agent.id][0])) == 0:
+                if self.cntrl.pokemon_for_agent.get(agent.id) is None:
+                    self.cntrl.add_paths_to_agents()
+                elif (len(self.cntrl.pokemon_for_agent[agent.id][0])) == 0:
                     self.cntrl.add_paths_to_agents()
             print(self.cntrl.pokemon_for_agent)
             print(self.cntrl.client.get_agents())

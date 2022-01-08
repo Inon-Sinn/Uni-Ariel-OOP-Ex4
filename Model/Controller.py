@@ -1,3 +1,4 @@
+import math
 from types import SimpleNamespace
 
 from Model.DiGraph import DiGraph
@@ -29,10 +30,10 @@ class controller:
         self.pokemons = Pokemons(self.client.get_pokemons())
         self.add_agents()
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
-        for agent in self.agents.agents:
-            self.pokemon_for_agent[agent.id] = ([], -1)
 
         self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos)}
+        for agent in self.agents.agents:
+            self.pokemon_for_agent[agent.id] = ([], -1, math.inf)
 
         self.ttl = float(self.client.time_to_end())
         self.grade = 0
@@ -88,7 +89,7 @@ class controller:
         edges = []
         for agent in self.agents.agents:
             if agent.dest == -1:
-                if self.pokemon_for_agent[agent.id][0].__len__() != 0:
+                if len(self.pokemon_for_agent[agent.id][0]) != 0:
                     nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
                     tup = (agent.id, nextnode)
                     edges.append(tup)
