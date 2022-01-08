@@ -1,5 +1,5 @@
 
-from Model.GraphAlgo import GraphAlgo
+from Model.fucked_graph_algo import GraphAlgo
 
 if __name__ == '__main__':
     algo = GraphAlgo()
