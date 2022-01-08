@@ -2,7 +2,7 @@ from pygame import gfxdraw
 import pygame
 
 from Model.Controller import controller
-from Model.GraphAlgo import GraphAlgo
+from Model.Graph_Algo import GraphAlgo
 
 pygame.init()
 

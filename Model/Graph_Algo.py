@@ -2,21 +2,24 @@ import json
 import math
 from typing import List
 import numpy as np
-
+from Model import GraphAlgoInterface
 from Model.DiGraph import DiGraph
 from Model.GraphInterface import GraphInterface
 from queue import Queue
-from Model.MinHeap import MinHeap
+from Model.Minheap import MinHeap
 
 norm = np.linalg.norm
 
 
-class GraphAlgo:
+class GraphAlgo(GraphAlgoInterface):
+    """This Class Represents the Algorithms we can Run on the Graph we implemented,
+    This class implements the GraphAlgo Interface given in the Assignment"""
 
-    def __init__(self):
-        self.graph = None
+    def __init__(self, graph: DiGraph = None):
+        self.graph = graph
 
     def get_graph(self) -> GraphInterface:
+        """Returns the Graph on which the Algorithms run"""
         return self.graph
 
     def closestEdges(self, pos) -> list:
@@ -74,11 +77,28 @@ class GraphAlgo:
         edge = self.edgeByType(type, edgeDistances)
         return edge[0], edge[1], self.distanceOnEdge(edge, pos)
 
-    def best_Path_foreach_agent(self, agents: list, pokemons: list, agent_to_pokemon: dict) -> dict:
+    def best_Path_foreach_agent(self, agents: list, pokemons: list) -> dict:
         """ receiving agents [] and pokemons [] and agent_to_pokemon{agent.id,(path[], pok(x,y)}
          and returns {agent.id,(path[], pok(x,y)}
         """
+        d = {}
+        paths = []  # (weight, path, agent.id, pok.pos)
 
+        for agent in agents.agents:
+            for pokemon in pokemons.pokemons:
+                pok_root = self.PokemonPlacement(pokemon.type, pokemon.pos)[0]
+                if agent.dest == -1:
+                    weight, path = self.shortest_path(agent.src, pok_root)
+                else:
+                    weight, path = self.shortest_path(agent.dest, pok_root)
+                paths.append((weight, path, agent.id, pokemon.pos))
+        # note that sorting might improve run time
+        for agent in agents.agents:
+            weight = math.inf
+            for i in range(paths.__len__()):
+                if paths[i][2] == agent.id and paths[i][0] < weight:
+                    d[agent.id] = (paths[i][1], paths[i][3], paths[i][0])
+        return d  # {agent.id : (path, pokemon pos) }
 
     def check_if_pokemon_occupied(self, agents: list, agent_to_pokemon: dict, pokemon_pos: tuple) -> bool:
         for agent in agents:
@@ -105,6 +125,7 @@ class GraphAlgo:
         return True
 
     def load_from_json(self, file_name: str) -> bool:
+        """Given the name of a json file of a graph this algorithm will load the Graph"""
         graph = DiGraph()
         try:  # Checks if the file even Exists
             with open(file_name, "r+") as f:
@@ -125,6 +146,7 @@ class GraphAlgo:
         return True
 
     def save_to_json(self, file_name: str) -> bool:
+        """This Algorithms Saves the Graph of this class into a json file with the given File Name"""
         # Checks the Input
         if file_name is None:
             return False
@@ -154,66 +176,92 @@ class GraphAlgo:
             return False
 
     def shortest_path(self, id1: int, id2: int) -> (float, list):
+        """
+        shortestPath - O(|E|log|V|)
+        we are given two nodes id's of the source and the destination,
+        we then run Dijstra using those two id's and then return the path to get from the source to the destination.
+        :param id1: Id of the source/start node
+        :param id2: Id of the destination/end
+        :return: a Tuple(the distance of the shortest path, the path as list of node id's)
+        """
         dijkstra = Dijkstra(self.graph)
-        # define distances from src as distance Of Shortest Paths
-        distancesFromSrc = dijkstra.DijkstraAlgo(id1)
-        if distancesFromSrc.get(id2) is math.inf:
+        # define distances From src as distance Of Shortest Paths
+        distancesFromsrc = dijkstra.DijkstraAlgo(id1)
+        if distancesFromsrc.get(id2) is math.inf:
             return float('inf'), []
-        return distancesFromSrc.get(id2), dijkstra.ShortestPath(id1, id2)
+        return distancesFromsrc.get(id2), dijkstra.ShortestPath(id1, id2)
 
     def TSP(self, node_lst: List[int]) -> (List[int], float):
+        """
+        tsp - O(n^2*|E|log|V|)
+        traveling salesman problem(almost), we get a list of cities(id's of nodes)
+        and have to return a path that passes through all cities(not the shortest just a path).
+        We do this using a greedy algorithem, we start from the first city,
+        the next city is the closest unvisited city to it, which we find with Dijkstra,
+        and we contuine like this until we went over all city's. After which we return the path we went.
+        :param node_lst: list of node id's representing the cities
+        :return: a Tuple(the path as list of node id's,the distance of the Path)
+        """
         if node_lst is None:
-            return None
+            return None, math.inf
         if node_lst.__len__() == 1:
             return node_lst
         completePath = []
         currentPath = []
-        currentCityIndex = node_lst.pop(0)
+        currentCity = node_lst.pop(0)
         found = False
+        total_dist = 0
         while node_lst.__len__() != 0:
-            nextCityIndex = 0
+            next_city = 0
             removeIndex = 0
             minPathWeight = math.inf
             # getting the minimal path
             for i in range(node_lst.__len__()):
                 # define ShortPathWeight as the distance from the start node to node at index i
-                (shortPathWeight, ShortPathList) = self.shortest_path(currentCityIndex, node_lst[i])
+                (shortPathWeight, ShortPathList) = self.shortest_path(currentCity, node_lst[i])
                 # if there is a path shortPathWeight is real number, else it is infinity
                 if shortPathWeight < minPathWeight:
-                    nextCityIndex = i
+                    next_city = node_lst[i]
                     removeIndex = i
                     currentPath = ShortPathList
                     minPathWeight = shortPathWeight
                     found = True
             if not found:
-                return None
+                return None, math.inf
             found = False
-            currentCityIndex = nextCityIndex
+            currentCity = next_city
             node_lst.pop(removeIndex)
-            completePath = currentPath.copy()
+            completePath.extend(currentPath.copy())
+            total_dist += minPathWeight
 
-        # remove duplicates lol
-        for i in range(completePath.__len__()):
-            if completePath[i] == completePath[i - 1]:
-                completePath.remove(i)
-        return completePath
+        # remove dublicates lol
+        i = 0
+        while i < len(completePath) - 1:
+            if completePath[i] == completePath[(i + 1)]:
+                completePath.pop(i)
+            i += 1
+        return completePath, total_dist
 
     def centerPoint(self) -> (int, float):
-        if not self.isConnected:  # TODO check if returning None is correct in case that there is no Center
-            return None  # next(iter(self.graph.get_all_v().keys())),math.inf
+        """
+        center - O(|V||E|log|V|)
+        The center is the node which minimizes the max distance to all the other nodes.
+        First we check if the graph is even connected else there won't be a center at all. If the graph is connected
+        we run Dijkstra from every node we return the node minimizes the max distance to all the other nodes.
+        :return: Tuple(center node id, min-maximum distance)
+        """
+        if self.isConnected() is False:
+            return None, math.inf
         center_id = 0
-        center_dis = math.inf
+        center_max_dis = math.inf
         for node in self.graph.get_all_v().values():
             dijk = Dijkstra(self.graph)
             dijk.DijkstraAlgo(node.Id)
             current_maxDis = dijk.MaxWeight()
-            if current_maxDis < center_dis and current_maxDis != -1:
-                center_dis = current_maxDis
+            if current_maxDis < center_max_dis and current_maxDis != -1:
+                center_max_dis = current_maxDis
                 center_id = node.Id
-        return center_id, center_dis
-
-    def plot_graph(self) -> None:
-        pass
+        return center_id, center_max_dis
 
     def isConnected(self) -> bool:
         """An auxiliary function for center Point, Checks if the given Graph is Connected"""
@@ -248,7 +296,7 @@ class BFS:
         :param graph: a Graph that implements the GraphInterface
         """
         self.graph = graph
-        self.Q = Queue(self.graph.v_size())  # TODO check that 0 is infinite in help()
+        self.Q = Queue(self.graph.v_size())
         self.d = {}
         self.prev = {}  # TODO could be deleted if there is no use for it
         # constants
@@ -345,10 +393,10 @@ class Dijkstra:
 
     def ShortestPath(self, src, dest) -> list:
         """
-        An Auxiliary function that Return the shortest path between 2 given nodes in a form of a list
+        An Auxiliray function that Return the shortest path between 2 given nodes in a form of a list
         :param src: the id of the starting node
         :param dest: the id of the end node
-        :return: list - the shortest path between the two nodes (them included)
+        :return: list - the shotest path between the two nodes (them included)
         """
         shortestPath = []
         current = dest
@@ -363,22 +411,12 @@ class Dijkstra:
         shortestPath.insert(0, src)
         return shortestPath
 
-        # Q = Queue(0)
-        # Q.put(dest)
-        # cur = dest
-        # while self.prev.get(cur) is not src:
-        #     Q.put(self.prev.get(cur))
-        #     cur = self.prev.get(cur)
-        # path = [src]
-        # while not Q.empty():
-        #     path.append(Q.get_nowait())
-        # return path
-
     def MaxWeight(self) -> float:
+        """ An Auxiliary function that returns the max weight found in this Dijkstra run"""
         Max = 0
         for weight in self.distsFromSrc.values():
-            if weight > Max:
-                Max = weight
             if weight == math.inf:
                 return -1
+            if weight > Max:
+                Max = weight
         return Max

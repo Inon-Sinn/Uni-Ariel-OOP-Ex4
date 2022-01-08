@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 
 from Model.DiGraph import DiGraph
-from Model.GraphAlgo import GraphAlgo
+from Model.Graph_Algo import GraphAlgo
 from client_python.client import Client
 from Model.classes.agents import *
 from Model.classes.pokemons import *
@@ -30,9 +30,7 @@ class controller:
         self.add_agents()
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
 
-
-        self.pokemon_for_agent = {} # dict of agent.id : ( path to pokemon,pokemon.pos)
-        self.paths_for_agents = {} # dict of agent.id : path to pokemon
+        self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos)}
 
         self.ttl = float(self.client.time_to_end())
         self.grade = 0
@@ -90,7 +88,7 @@ class controller:
         edges = []
         for agent in self.agents.agents:
             if agent.dest == -1:
-                nextnode = (agent.src - 1) % self.graph.v_size()
+                nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
                 tup = (agent.id, nextnode)
                 edges.append(tup)
         return edges
@@ -107,12 +105,4 @@ class controller:
         self.client.move()
 
     def add_paths_to_agents(self):
-        src_nodes_pokemon = []
-        for pokemon in self.pokemons.pokemons:
-            src, dest, dist = self.graphAlgo.PokemonPlacement(pokemon.type, pokemon.pos)
-            src_nodes_pokemon.append((src, dest, dist))
-            # dist not used yet
-        for agent in self.agents.agents:
-            pass
-           # self.paths_for_agents[agent.id] =
-        pass
+        self.pokemon_for_agent = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
