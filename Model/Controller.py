@@ -7,13 +7,16 @@ from Model.classes.agents import *
 from Model.classes.pokemons import *
 import threading
 import json
+import random
 
 
 class controller:
 
     def __init__(self):
+
         ip = '127.0.0.1'
         port = 6666
+
         # start connection
         self.client = Client()
         self.client.start_connection(ip, port)
@@ -23,9 +26,9 @@ class controller:
         self.graphAlgo.load_from_json_string(self.client.get_graph())
         self.graph = self.graphAlgo.graph
 
-        self.add_agents([1, 2, 3, 4])
-        self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
         self.pokemons = Pokemons(self.client.get_pokemons())
+        self.add_agents()
+        self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
 
         self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos)}
 
@@ -44,27 +47,42 @@ class controller:
     #     if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc, self.ttl):
     #         close()
 
-    def update_Agents(self):
+    def update_Agents(self):  # TODO if its not fast enough change this
         agents_json = self.client.get_agents()
         self.agents = Agents(agents_json)
 
-    def update_Pokemons(self):
+    def update_Pokemons(self):  # TODO if its not fast enough change this
         pokemons_json = self.client.get_pokemons()  # setting pokemons and agents
         self.pokemons = Pokemons(pokemons_json)
 
-    def add_agents(self, list_of_starting_nodes):
-        # insert closest node to pokemon algorithm here
-        # if len(list_of_starting_nodes) > 4:
-        #     print("cant insert more than 4 agents")
-        # for starting_node in list_of_starting_nodes:
-        #     #                      "{\"id\":0}"
-        #     self.client.add_agent('{\"id\":' + starting_node + '}')
+    def add_agents(self):
+        # get the amount of agents in this game - n
+        info = json.loads(self.client.get_info())
+        n = info['GameServer']['agents']
+        print(n)
+        # find the n pokemon with the highest value if they exist
+        pokList = []
+        copyList = self.pokemons.pokemons.copy()
+        for i in range(n):
+            if len(copyList) is not 0:
+                bestPokemon = copyList[0]
+                for pok in copyList:
+                    if pok.value > bestPokemon.value:
+                        bestPokemon = pok
+                pokList.append(bestPokemon)
+                copyList.remove(bestPokemon)
+        # use the pokemon finder for each pokemon
+        for j in range(len(pokList)):
+            pokList[j] = self.graphAlgo.PokemonPlacement(pokList[j].type, pokList[j].pos)
+        if len(pokList) is not n:
+            for i in range(n - len(pokList)):
+                pokList.append((random.randint(0, self.graph.v_size()), 0, 0))
+        # add the agents to the node next to the pokemon
+        for l in range(len(pokList)):
+            if self.client.add_agent("{\"id\"" + f":{pokList[l][0]}" + "}") is False:
+                print("Agent wasn't added, you fucked up")
 
-        if not self.client.add_agent("{\"id\":0}"):
-            print("agent adding failed")
-        # self.client.add_agent("{\"id\":14}")
-        # self.client.add_agent("{\"id\":10}")
-        # self.client.add_agent("{\"id\":5}")
+
 
     def determine_next_edges(self):
         edges = []
