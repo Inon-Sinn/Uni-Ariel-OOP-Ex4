@@ -116,7 +116,7 @@ class Gui:
 
         # Start the Game
         #self.cntrl.add_paths_to_agents()
-
+        self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
         # get the time of arrival
         self.cntrl.client.start()
         while True:
@@ -132,7 +132,7 @@ class Gui:
 
             self.cntrl.update_Agents()
             self.cntrl.update_Pokemons()
-            self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
+
             self.cntrl.client.get_info()
             self.cntrl.client.move()
             self.update(0, 0, int(self.cntrl.ttl / 1000))
