@@ -2,7 +2,7 @@ from pygame import gfxdraw
 import pygame
 
 from Model.Controller import controller
-from Model.fucked_graph_algo import GraphAlgo
+from Model.Graph_Algo import GraphAlgo
 
 pygame.init()
 

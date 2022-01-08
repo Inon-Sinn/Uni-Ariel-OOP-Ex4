@@ -1,7 +1,7 @@
 from types import SimpleNamespace
 
 from Model.DiGraph import DiGraph
-from Model.fucked_graph_algo import GraphAlgo
+from Model.Graph_Algo import GraphAlgo
 from client_python.client import Client
 from Model.classes.agents import *
 from Model.classes.pokemons import *
