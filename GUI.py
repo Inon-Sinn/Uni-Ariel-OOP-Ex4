@@ -116,6 +116,7 @@ class Gui:
 
         # Start the Game
         self.cntrl.client.start()
+        self.cntrl.add_paths_to_agents()
 
         while True:
             for gui_event in pygame.event.get():
