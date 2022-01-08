@@ -1,12 +1,8 @@
 from pygame import gfxdraw
 import pygame
-import os
 
 from Model.Controller import controller
 from Model.GraphAlgo import GraphAlgo
-from Model.classes.pokemons import Pokemon
-
-import time
 
 pygame.init()
 
@@ -44,8 +40,8 @@ class Gui:
     def __init__(self, width: int, height: int, debug=False):
 
         self.cntrl = controller()
-        self.firstRun = True
-
+        self.cntrl.add_agents([])
+        self.cntrl.client.start()
         # Pokemon Game Variables
         self.agents = self.cntrl.agents.agents
         self.pokemon = self.cntrl.pokemons.pokemons
@@ -55,9 +51,6 @@ class Gui:
         self.graph = self.cntrl.graph
         self.debug = debug
         self.running = True
-        # print(os.getcwd())
-        # os.chdir('../')
-        # print(os.getcwd())
 
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
@@ -275,7 +268,7 @@ class Gui:
                 pygame.gfxdraw.aacircle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 pygame.gfxdraw.filled_circle(self.screen, int(x), int(y), AgentsNodeRadius, pygame.Color(AgentColor))
                 # Write the Id
-                title = "{},{}".format(agent.id,agent.value)
+                title = "{},{}".format(agent.id, agent.value)
                 id_srf = FONT.render(title, True, pygame.Color(AgentIdColor))
                 self.screen.blit(id_srf, id_srf.get_rect(center=(x, y)))
             else:
@@ -287,10 +280,6 @@ class Gui:
                 self.screen.blit(pic, rect)
 
     def updateController(self):
-        if self.firstRun:
-            self.firstRun = False
-            self.cntrl.add_agents([])
-            self.cntrl.client.start()
         self.cntrl.update_Agents()
         self.cntrl.update_Pokemons()
         list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
@@ -301,11 +290,10 @@ class Gui:
         # print(self.cntrl.ttl, self.cntrl.client.get_info())
         if self.timer > int(self.cntrl.ttl / 1000):
             self.cntrl.client.move()
-        self.update(0, 0, int(self.cntrl.ttl/1000))
+        self.update(0, 0, int(self.cntrl.ttl / 1000))
 
 
-
-class StopButton:
+class StopButton:  # TODO Doesnt work currently
     """This Class Represent the Stop Button"""
 
     def __init__(self, height, width, titleColor):
