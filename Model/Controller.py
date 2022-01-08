@@ -24,12 +24,13 @@ class controller:
         self.graph = self.graphAlgo.graph
 
         self.add_agents([1, 2, 3, 4])
-        self.agents = Agents(self.client.get_agents())  # declare variables
+        self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
         self.pokemons = Pokemons(self.client.get_pokemons())
-        self.paths = []
-        self.add_paths_to_agents()
+
+        self.pokemon_for_agent = {} # dict of agent.id : pokemon.pos
+        self.paths_for_agents = {} # dict of agent.id : path to pokemon
+
         self.ttl = float(self.client.time_to_end())
-        # what is mc
         self.grade = 0
 
     def find_next_route(self):
@@ -67,11 +68,14 @@ class controller:
         # self.client.add_agent("{\"id\":5}")
 
     def determine_next_edges(self):
+
         edges = []
+
+
         for agent in self.agents.agents:
             if agent.dest == -1:
 
-
+                pass
                 # nextnode = (agent.src - 1) % self.graph.v_size()
                 # tup = (agent.id, nextnode)
                 # edges.append(tup)
@@ -89,5 +93,12 @@ class controller:
         self.client.move()
 
     def add_paths_to_agents(self):
-
+        src_nodes_pokemon = []
+        for pokemon in self.pokemons.pokemons:
+            src, dest, dist = self.graphAlgo.PokemonPlacement(pokemon.type, pokemon.pos)
+            src_nodes_pokemon.append((src, dest, dist))
+            # dist not used yet
+        for agent in self.agents.agents:
+            pass
+           # self.paths_for_agents[agent.id] =
         pass
