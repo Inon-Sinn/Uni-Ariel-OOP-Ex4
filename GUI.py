@@ -40,8 +40,6 @@ class Gui:
     def __init__(self, width: int, height: int, debug=False):
 
         self.cntrl = controller()
-        self.cntrl.add_agents([])
-        self.cntrl.client.start()
         # Pokemon Game Variables
         self.agents = self.cntrl.agents.agents
         self.pokemon = self.cntrl.pokemons.pokemons
@@ -116,6 +114,9 @@ class Gui:
         # Upper Margin
         stop = StopButton(80, 100, ButtonTitleColor)
 
+        # Start the Game
+        self.cntrl.client.start()
+
         while True:
             for gui_event in pygame.event.get():
                 if gui_event.type == pygame.QUIT:
@@ -128,7 +129,7 @@ class Gui:
                         self.running = False
 
             # update the data
-            self.updateController()
+            # self.updateController()
 
             # refresh surface and Background
             self.screen.fill(pygame.Color(screenColor))
@@ -315,38 +316,7 @@ class StopButton:  # TODO Doesnt work currently
         return False
 
 
-class fakeAgent:  # TODO remove this
-    def __init__(self, Id, pos, value=0):
-        self.id = Id
-        self.value = value
-        self.pos = pos
-
-
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
-    test = Gui(WIDTH, HEIGHT, debug=False)
-
-    # pygame.mainloop(10)
-    # t1 = threading.Thread(target=test.MainRun())
-    # t1.setName("First Thread")
-    # t1.start()
-    #
-    #
-    #
-    # pos1 = (algo.get_graph().getNode(6).pos[0], algo.get_graph().getNode(1).pos[1])
-    # pokemon1 = Pokemon(16, -1, pos1)
-    # pos2 = (algo.get_graph().getNode(2).pos[0], algo.get_graph().getNode(6).pos[1])
-    # pokemon2 = Pokemon(1, 1, pos2)
-    # pokemon = [pokemon1, pokemon2]
-    #
-    # agent1 = fakeAgent(3, (algo.get_graph().getNode(4).pos[0], algo.get_graph().getNode(4).pos[1]))
-    # agent2 = fakeAgent(2, (algo.get_graph().getNode(8).pos[0], algo.get_graph().getNode(8).pos[1]))
-    # agents = [agent1, agent2]
-    #
-    # # t2 = threading.Thread(target=test.update(), args=[pokemon,agents,100,10,150])
-    # # t2.setName("Second Thread")
-    # # time.sleep(1)
-    # # t2.start()
-    # test.pokemon = pokemon
-    # test.update(pokemon,agents,100,10,150)
+    test = Gui(WIDTH, HEIGHT, debug=True)
