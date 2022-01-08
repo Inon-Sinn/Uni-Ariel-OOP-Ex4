@@ -91,7 +91,9 @@ class GraphAlgo(GraphInterface):
                     weight, path = self.shortest_path(agent.src, pok_root)
                 else:
                     weight, path = self.shortest_path(agent.dest, pok_root)
+                path.pop(0)
                 paths.append((weight, path, agent.id, pokemon.pos))
+
         # note that sorting might improve run time
         for agent in agents.agents:
             weight = math.inf

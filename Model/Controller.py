@@ -82,24 +82,26 @@ class controller:
             if self.client.add_agent("{\"id\"" + f":{pokList[l][0]}" + "}") is False:
                 print("Agent wasn't added, you fucked up")
 
-
-
     def determine_next_edges(self):
         edges = []
         for agent in self.agents.agents:
             if agent.dest == -1:
-                nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
-                tup = (agent.id, nextnode)
-                edges.append(tup)
+                if self.pokemon_for_agent[agent.id][0].__len__() != 0:
+                    nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
+                    tup = (agent.id, nextnode)
+                    edges.append(tup)
+                else:
+                    return None;
         return edges
         # insert algorithm here
 
     def insert_edges_to_client(self, list_tup_id_edge):
-        for tup in list_tup_id_edge:
-            #                            '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}'
-            self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ', "next_node_id":' + str(tup[1]) + '}')
-            # self.client.choose_next_edge(
-            #     '{\"agent_id\":' + str(tup[0]) + ', \"next_node_id\":' + str(tup[1]) + '}')
+        if list_tup_id_edge is not None:
+            for tup in list_tup_id_edge:
+                #                            '{"agent_id":'+str(agent.id)+', "next_node_id":'+str(next_node)+'}'
+                self.client.choose_next_edge('{"agent_id":' + str(tup[0]) + ', "next_node_id":' + str(tup[1]) + '}')
+                # self.client.choose_next_edge(
+                #     '{\"agent_id\":' + str(tup[0]) + ', \"next_node_id\":' + str(tup[1]) + '}')
 
     def move_agents(self):
         self.client.move()
