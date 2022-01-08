@@ -134,58 +134,47 @@ class Gui:
                     if stop.check(click):
                         self.running = False
 
-                # update the data
-                self.updateController()
-
-                # refresh surface and Background
-                self.screen.fill(pygame.Color(screenColor))
-                background = pygame.transform.scale(background, (self.screen.get_width(), self.screen.get_height()))
-                rect = background.get_rect()
-                self.screen.blit(background, rect)
-                self.margin = max(self.screen.get_height() / 10, 50)
-
-                # Render the Button
-                stop.render(self.screen, ButtonColor, (0, self.margin / hd),
-                            (self.screen.get_width() * (1 / BoxWidth), self.margin * (bHdP / hd)))
-                draw_rect_outline(self.screen, stop.rect, boxOutlineColor, BoxOutlineWidth)
-
-                # Timer
-                pos = (self.screen.get_width() * (1 / BoxWidth) + 1, self.margin / hd)
-                text = " Time: {}s ".format(self.timer)
-                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
-
-                # Move Counter
-                pos = (self.screen.get_width() * (2 / BoxWidth) + 2, self.margin / hd)
-                text = " Moves: {} ".format(self.mc)
-                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
-
-                # Point Counter
-                pos = (self.screen.get_width() * (3 / BoxWidth) + 3, self.margin / hd)
-                text = " Points: {} ".format(self.points)
-                self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
-                                 TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
-
-                # draw Edges
-                self.drawEdges(edgeColor, edgeWidth)
-
-                # draw Nodes
-                self.drawNodes(NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor)
-
-                # draw Pokemon
-                PokemonNodeRadius = 0.055 * self.screen.get_height()
-                self.drawPokemon(PokemonNodeRadius, PokemonColor, PokemonTextColor, pokemonDebugRadius)
-
-                # draw Agents
-                AgentsSize = 0.055 * self.screen.get_height()
-                self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
-
-                # update screen changes
-                pygame.display.update()
-
-                # refresh rate
-                clock.tick(120)
+            # update the data
+            self.updateController()
+            # refresh surface and Background
+            self.screen.fill(pygame.Color(screenColor))
+            background = pygame.transform.scale(background, (self.screen.get_width(), self.screen.get_height()))
+            rect = background.get_rect()
+            self.screen.blit(background, rect)
+            self.margin = max(self.screen.get_height() / 10, 50)
+            # Render the Button
+            stop.render(self.screen, ButtonColor, (0, self.margin / hd),
+                        (self.screen.get_width() * (1 / BoxWidth), self.margin * (bHdP / hd)))
+            draw_rect_outline(self.screen, stop.rect, boxOutlineColor, BoxOutlineWidth)
+            # Timer
+            pos = (self.screen.get_width() * (1 / BoxWidth) + 1, self.margin / hd)
+            text = " Time: {}s ".format(self.timer)
+            self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                             TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
+            # Move Counter
+            pos = (self.screen.get_width() * (2 / BoxWidth) + 2, self.margin / hd)
+            text = " Moves: {} ".format(self.mc)
+            self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                             TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
+            # Point Counter
+            pos = (self.screen.get_width() * (3 / BoxWidth) + 3, self.margin / hd)
+            text = " Points: {} ".format(self.points)
+            self.drawTextBox(pos, self.margin * (bHdP / hd), self.screen.get_width() * (1 / BoxWidth), text,
+                             TextColor, ButtonColor, boxOutlineColor, BoxOutlineWidth)
+            # draw Edges
+            self.drawEdges(edgeColor, edgeWidth)
+            # draw Nodes
+            self.drawNodes(NodeColor, NodeIdColor, NodeRadius, NodeOutlineColor)
+            # draw Pokemon
+            PokemonNodeRadius = 0.055 * self.screen.get_height()
+            self.drawPokemon(PokemonNodeRadius, PokemonColor, PokemonTextColor, pokemonDebugRadius)
+            # draw Agents
+            AgentsSize = 0.055 * self.screen.get_height()
+            self.drawAgent(AgentColor, AgentIdColor, AgentsNodeRadius, AgentsSize)
+            # update screen changes
+            pygame.display.update()
+            # refresh rate
+            clock.tick(120)
 
     def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
         """Draws the Text Box given the right input"""
@@ -284,9 +273,11 @@ class Gui:
         self.cntrl.insert_edges_to_client(list_tup)
         self.cntrl.ttl = float(self.cntrl.client.time_to_end())
         self.cntrl.client.get_info()
-        # print(self.cntrl.ttl, self.cntrl.client.get_info())
-        self.cntrl.client.move()
-        self.update(self.cntrl.ttl, 0, 0)
+        print(self.cntrl.ttl, self.cntrl.client.get_info())
+        print (self.timer)
+        if self.timer % 1000 == 0:
+            self.cntrl.client.move()
+        self.update(0, 0, self.cntrl.ttl)
 
 
 class StopButton:
@@ -322,7 +313,7 @@ class fakeAgent:  # TODO remove this
 if __name__ == '__main__':
     algo = GraphAlgo()
     algo.load_from_json("data/A3")
-    test = Gui(WIDTH, HEIGHT, debug=True)
+    test = Gui(WIDTH, HEIGHT, debug=False)
 
     # pygame.mainloop(10)
     # t1 = threading.Thread(target=test.MainRun())

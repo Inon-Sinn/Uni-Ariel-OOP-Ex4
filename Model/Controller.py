@@ -26,6 +26,8 @@ class controller:
         self.add_agents([1, 2, 3, 4])
         self.agents = Agents(self.client.get_agents())  # declare variables
         self.pokemons = Pokemons(self.client.get_pokemons())
+        self.paths = []
+        self.add_paths_to_agents()
         self.ttl = float(self.client.time_to_end())
         # what is mc
         self.grade = 0
@@ -68,9 +70,11 @@ class controller:
         edges = []
         for agent in self.agents.agents:
             if agent.dest == -1:
-                nextnode = (agent.src + 1) % self.graph.v_size()
-                tup = (agent.id, nextnode)
-                edges.append(tup)
+
+
+                # nextnode = (agent.src - 1) % self.graph.v_size()
+                # tup = (agent.id, nextnode)
+                # edges.append(tup)
         return edges
         # insert algorithm here
 
@@ -83,3 +87,7 @@ class controller:
 
     def move_agents(self):
         self.client.move()
+
+    def add_paths_to_agents(self):
+
+        pass
