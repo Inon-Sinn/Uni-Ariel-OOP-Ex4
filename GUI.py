@@ -120,11 +120,9 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        # self.cntrl.add_paths_to_agents()
-
-        # get the time of arrival
-        self.MoveTime = time()
         self.cntrl.client.start()
+        self.cntrl.test_algorithm()
+        self.NextStop = time()
 
         while True:
             for gui_event in pygame.event.get():
@@ -141,9 +139,12 @@ class Gui:
                             self.running = True
 
             # update the data
-            if self.cntrl.test_algorithm(self.MoveTime):
-                self.MoveTime = time() -0.1
+            if time() >= self.NextStop:
+                self.cntrl.move_agents()
+                self.cntrl.test_algorithm()
+                self.NextStop = self.cntrl.calculateNextStopTime()
                 self.update()
+
             # self.update(self.cntrl.pokemon_for_agent[0][0], self.cntrl.pokemon_for_agent[0][1],
             #             int(self.cntrl.ttl / 1000))
 
@@ -295,7 +296,8 @@ class Gui:
                 rect.center = (x, y)
                 self.screen.blit(pic, rect)
 
-class StopButton:  # TODO Doesnt work currently
+
+class StopButton:
     """This Class Represent the Stop Button"""
 
     def __init__(self, height, width, titleColor):
