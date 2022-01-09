@@ -26,3 +26,13 @@ class Agents:
             pos = (float(x),float(y))
             a = Agent(id, value, src, dest, speed, pos)
             self.agents.append(a)
+
+    def getSpeedById(self, Id):
+        for i in range(len(self.agents)):
+            if self.agents[i].id == Id:
+                return self.agents[i].speed
+
+    def getPosById(self,Id):
+        for i in range(len(self.agents)):
+            if self.agents[i].id == Id:
+                return self.agents[i].pos

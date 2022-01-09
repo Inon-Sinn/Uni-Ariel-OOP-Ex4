@@ -316,7 +316,7 @@ class BFS:
         self.graph = graph
         self.Q = Queue(self.graph.v_size())
         self.d = {}
-        self.prev = {}  # TODO could be deleted if there is no use for it
+        self.prev = {}
         # constants
         self.white = 0
         self.gray = 1

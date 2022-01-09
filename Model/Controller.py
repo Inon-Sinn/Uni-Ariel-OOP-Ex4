@@ -1,4 +1,5 @@
 import math
+from time import time
 from types import SimpleNamespace
 
 from Model.DiGraph import DiGraph
@@ -51,16 +52,11 @@ class controller:
     def close(self):
         self.client.stop_connection()
 
-    # def update_GUI(self):
-    #     # if gui returns false then close the controler
-    #     if not self.gui.update(self.pokemons.pokemons, self.agents.agents, self.grade, self.gui.mc, self.ttl):
-    #         close()
-
-    def update_Agents(self):  # TODO if its not fast enough change this
+    def update_Agents(self):
         agents_json = self.client.get_agents()
         self.agents = Agents(agents_json)
 
-    def update_Pokemons(self):  # TODO if its not fast enough change this
+    def update_Pokemons(self):
         pokemons_json = self.client.get_pokemons()  # setting pokemons and agents
         self.pokemons = Pokemons(pokemons_json)
 
@@ -68,7 +64,6 @@ class controller:
         # get the amount of agents in this game - n
         info = json.loads(self.client.get_info())
         n = info['GameServer']['agents']
-        print(n)
         # find the n pokemon with the highest value if they exist
         pokList = []
         copyList = self.pokemons.pokemons.copy()
@@ -118,3 +113,35 @@ class controller:
 
     def add_paths_to_agents(self):
         self.pokemon_for_agent = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
+
+    def test_algorithm(self):
+        self.update_Agents()
+        self.update_Pokemons()
+        for agent in self.agents.agents:
+            if self.pokemon_for_agent.get(agent.id) is None:
+                self.add_paths_to_agents()
+            elif (len(self.pokemon_for_agent[agent.id][0])) == 0:
+                self.add_paths_to_agents()
+        list_tup = self.determine_next_edges()  # list of (agent id, next node)
+        self.insert_edges_to_client(list_tup)
+        self.ttl = float(self.client.time_to_end())
+
+    def calculateNextStopTime(self):
+        MinTime = math.inf
+        for agent in self.pokemon_for_agent.items():
+            path = agent[1][0]
+            weight = 0
+            # Next Node is Pokemon
+            if len(path) == 1:
+                sourceNodeId = self.last_node_for_agent[agent[0]]
+                destNodeId = path[0]
+                weight = self.graphAlgo.distanceOnEdge((sourceNodeId, destNodeId, 0), agent[1][1])
+            else:
+                sourceNodeId = self.last_node_for_agent[agent[0]]
+                destNodeId = path[0]
+                weight = self.graphAlgo.distanceOnEdge((destNodeId, sourceNodeId, 0), self.agents.getPosById(agent[0]))
+            speed = self.agents.getSpeedById(agent[0])
+            Time = weight/speed
+            MinTime = min(MinTime, Time)
+        print(time(), ", ", time() + MinTime)
+        return time() + MinTime
