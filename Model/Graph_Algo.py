@@ -85,28 +85,44 @@ class GraphAlgo(GraphInterface):
         paths = []  # (weight, path, agent.id, pok.pos)
 
         for agent in agents.agents:
+            tta = 0
+            if agent.dest != -1:
+                tta = self.distanceOnEdge((agent.dest, agent.src, 0), agent.pos)
             for pokemon in pokemons.pokemons:
-                pok_root = self.PokemonPlacement(pokemon.type, pokemon.pos)[0]
+                pok_root, pok_dest, dist = self.PokemonPlacement(pokemon.type, pokemon.pos)
                 if agent.dest == -1:
                     weight, path = self.shortest_path(agent.src, pok_root)
-                else:
+                elif agent.src != pok_root:
                     weight, path = self.shortest_path(agent.dest, pok_root)
+                else:
+                    weight, path = self.shortest_path(agent.src, pok_root)
                 path.pop(0)
-                paths.append((weight, path, agent.id, pokemon.pos))
+                path.append(pok_dest)
+                paths.append(((weight + dist + tta)/agent.speed, path, agent.id, pokemon.pos))
 
         # note that sorting might improve run time
-        for agent in agents.agents:
-            weight = math.inf
-            for i in range(paths.__len__()):
-                if paths[i][2] == agent.id and paths[i][0] < weight:
-                    d[agent.id] = (paths[i][1], paths[i][3], paths[i][0])
-        return d  # {agent.id : (path, pokemon pos) }
 
-    def check_if_pokemon_occupied(self, agents: list, agent_to_pokemon: dict, pokemon_pos: tuple) -> bool:
-        for agent in agents:
-            if agent_to_pokemon[agent.id] == pokemon_pos:
-                return True
-        return False
+        paths = sorted(paths, key=lambda x: x[0])
+        pokemon_invalid = {}
+        # sorted algorithm improve runtime
+        for agent in agents.agents:
+            for i in range(len(paths)):
+                if (pokemon_invalid.get(paths[i][3]) == agent.id or pokemon_invalid.get(paths[i][3]) is None) \
+                         and paths[i][2] == agent.id:
+                    d[agent.id] = (paths[i][1], paths[i][3], paths[i][0])
+                    break
+            pokemon_invalid[d[agent.id][1]] = agent.id
+        return d
+        # working algo not best
+        # for agent in agents.agents:
+        #     weight = math.inf
+        #     for i in range(paths.__len__()):
+        #         if paths[i][2] == agent.id and paths[i][0] < weight and\
+        #                 (pokemon_invalid.get(paths[i][3]) == agent.id or pokemon_invalid.get(paths[i][3]) is None):
+        #             d[agent.id] = (paths[i][1], paths[i][3], paths[i][0])
+        #             weight = paths[i][0]
+        #     pokemon_invalid[d[agent.id][1]] = agent.id
+        # return d  # {agent.id : (path, pokemon pos, weight of path) }
 
     def load_from_json_string(self, jsonString: str) -> bool:
         graph = DiGraph()

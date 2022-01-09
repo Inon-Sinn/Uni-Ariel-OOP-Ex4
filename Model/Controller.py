@@ -1,4 +1,5 @@
 import math
+from time import time
 from types import SimpleNamespace
 
 from Model.DiGraph import DiGraph
@@ -62,7 +63,6 @@ class controller:
         # get the amount of agents in this game - n
         info = json.loads(self.client.get_info())
         n = info['GameServer']['agents']
-        print(n)
         # find the n pokemon with the highest value if they exist
         pokList = []
         copyList = self.pokemons.pokemons.copy()
@@ -111,3 +111,23 @@ class controller:
 
     def add_paths_to_agents(self):
         self.pokemon_for_agent = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
+
+    def test_algorithm(self, moveTime):
+        self.update_Agents()
+        self.update_Pokemons()
+        for agent in self.agents.agents:
+            if self.pokemon_for_agent.get(agent.id) is None:
+                self.add_paths_to_agents()
+            elif (len(self.pokemon_for_agent[agent.id][0])) == 0:
+                self.add_paths_to_agents()
+        # print(self.cntrl.pokemon_for_agent)
+        # print(self.cntrl.client.get_agents())
+        list_tup = self.determine_next_edges()  # list of (agent id, next node)
+        self.insert_edges_to_client(list_tup)
+        self.ttl = float(self.client.time_to_end())
+        self.client.get_info()
+        # print(self.cntrl.ttl, self.cntrl.client.get_info())
+        if moveTime <= time() - 0.1:
+            self.client.move()
+            return True
+        return False

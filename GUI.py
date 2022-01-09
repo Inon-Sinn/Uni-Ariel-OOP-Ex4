@@ -1,4 +1,4 @@
-import math
+import json
 
 from pygame import gfxdraw
 import pygame
@@ -67,13 +67,15 @@ class Gui:
         # Run the Gui
         self.MainRun()
 
-    def update(self, points, mc, timer):
+    def update(self):
         """Gets an Update from the Controller and Tells him the status"""
-        self.pokemon = self.cntrl.pokemons.pokemons
-        self.agents = self.cntrl.agents.agents
-        self.timer = timer
-        self.mc = mc
-        self.points = points
+        if self.running:
+            info = json.loads(self.cntrl.client.get_info())
+            self.pokemon = self.cntrl.pokemons.pokemons
+            self.agents = self.cntrl.agents.agents
+            self.timer = int(self.cntrl.ttl / 1000)
+            self.mc = info['GameServer']['moves']
+            self.points = info['GameServer']['grade']
 
     def my_scale(self, data, x=False, y=False):
         """An auxiliary function to calculate Coordinates on the screen given their position"""
@@ -86,9 +88,9 @@ class Gui:
         """This is the main loop of the pygame, 60 ticks"""
 
         # variables
-        pygame.display.set_caption('THIS CANT BE!! he has power level of 5000!!!')
+        pygame.display.set_caption('DOOM SLAYER')
         background = pygame.image.load("Images/pokemon_Map.jpg").convert_alpha()
-        BoxWidth = 8
+        BoxWidth = 4
         hd = 10  # Boxes Height divider
         bHdP = 4  # boxed height divider portion
 
@@ -118,19 +120,11 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        self.cntrl.client.start()
+        # self.cntrl.add_paths_to_agents()
 
-        # Choose the next edges
-        self.cntrl.add_paths_to_agents()
-        # self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
-
-        # do the Moves
-        self.cntrl.client.move()
+        # get the time of arrival
         self.MoveTime = time()
-
-        # Calculate the arriving time
-        # self.TimeToArival = 0.1
-        # self.CalculateTheTime()
+        self.cntrl.client.start()
 
         while True:
             for gui_event in pygame.event.get():
@@ -141,20 +135,17 @@ class Gui:
                 if gui_event.type == pygame.MOUSEBUTTONUP:
                     click = pygame.mouse.get_pos()
                     if stop.check(click):
-                        self.running = False
-
-            self.cntrl.update_Agents()
-            self.cntrl.update_Pokemons()
-
-            self.cntrl.client.get_info()
-            self.cntrl.client.move()
-            self.update(0, 0, int(self.cntrl.ttl / 1000))
+                        if self.running:
+                            self.running = False
+                        else:
+                            self.running = True
 
             # update the data
-            if time() >= self.MoveTime + 0.1:
-                self.cntrl.add_paths_to_agents()
+            if self.cntrl.test_algorithm(self.MoveTime):
                 self.MoveTime = time()
-            # self.updateController()
+                self.update()
+            # self.update(self.cntrl.pokemon_for_agent[0][0], self.cntrl.pokemon_for_agent[0][1],
+            #             int(self.cntrl.ttl / 1000))
 
             # refresh surface and Background
             self.screen.fill(pygame.Color(screenColor))
@@ -216,7 +207,7 @@ class Gui:
             pygame.display.update()
 
             # refresh rate
-            clock.tick(120)
+            clock.tick(60)
 
     def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
         """Draws the Text Box given the right input"""
@@ -303,32 +294,6 @@ class Gui:
                 rect = pic.get_rect()
                 rect.center = (x, y)
                 self.screen.blit(pic, rect)
-
-    def updateController(self):
-        self.cntrl.update_Agents()
-        self.cntrl.update_Pokemons()
-        list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
-        self.cntrl.insert_edges_to_client(list_tup)
-        self.cntrl.ttl = float(self.cntrl.client.time_to_end())
-        self.cntrl.client.get_info()
-
-        # print(self.cntrl.ttl, self.cntrl.client.get_info())
-        if self.timer > int(self.cntrl.ttl / 1000):
-            self.cntrl.client.move()
-        self.update(0, 0, int(self.cntrl.ttl / 1000))
-
-    # def CalculateTheTime(self):
-    #     time = math.inf
-    #
-    #     # time to get to the next node
-    #     for agent in self.cntrl.pokemon_for_agent.items():
-    #         speed = self.cntrl.agents.getSpeedById(agent[0])
-    #         # if one is about to catch a pokemon
-    #         if len(agent[1][0]) == 1:
-    #             currtime = agent[1][2]/speed
-    #         else self
-    #         agentTime =
-
 
 class StopButton:  # TODO Doesnt work currently
     """This Class Represent the Stop Button"""
