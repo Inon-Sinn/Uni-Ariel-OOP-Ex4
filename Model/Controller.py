@@ -102,7 +102,7 @@ class controller:
                     tup = (agent.id, nextnode)
                     edges.append(tup)
                 else:
-                    return None;
+                    return None
         return edges
         # insert algorithm here
 
@@ -118,7 +118,12 @@ class controller:
         self.client.move()
 
     def add_paths_to_agents(self):
-        self.pokemon_for_agent = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
+        d = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
+        for member in d.keys():
+            for agent in self.agents.agents:
+                if agent.id == member and agent.dest == -1:
+                    self.pokemon_for_agent[agent.id] = d[agent.id]
+
 
     def test_algorithm(self):
         self.update_Agents()
