@@ -47,17 +47,17 @@ Given a pokemon's position and type it returns the edges it on and the distance 
 
 ## Classes used
 
-### controller
+### [controller](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Controller.py#:~:text=class%20controller%3A,%22%22%22The%20Controller)
 This class's purpose is to controll all the algorithms and the client calls to the server. And is seperated completely from the GUI.
 
-### GUI
+### [GUI](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/GUI.py#:~:text=%22%22%22This-,class%20is%20Implements,-The%20View%2C%20The)
 This class's purpose is to visualize the game and provide information about the agents and nodes in real time.
 This class contains an instance of controller and lets the controller have all the communication with the server. Note that only the controller runs the algorithms and data transfers while the gui only contains controller for the purpose of getting the information and putting it on the screen.
 
-### agents and pokemons
+### [agents and pokemons](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/tree/master/Model/classes)
 This classes provide a simple classes that hold data of the objects. It allows us to load from a json string all the objects into a list of the class's instance.
 
-### Graph classes and graph algorithms
+### [Graph classes and graph algorithms](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/tree/master/Model)
 refer to [last Excersice](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex3/tree/master/src).
 
 ## [Video of the GUI running on case 11](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Ex4_Video_case11.zip)
