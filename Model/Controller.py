@@ -1,6 +1,12 @@
 import math
 from time import time
 from types import SimpleNamespace
+import logging
+
+logging.basicConfig(filename = "data/log", level=logging.DEBUG, filemode='w')
+logger = logging.getLogger()
+
+logger.info("our First Message")
 
 from Model.DiGraph import DiGraph
 from Model.Graph_Algo import GraphAlgo
@@ -132,16 +138,19 @@ class controller:
             path = agent[1][0]
             weight = 0
             # Next Node is Pokemon
-            if len(path) == 1:
+            logging.debug(agent[1])
+            if len(path) == 0:
                 sourceNodeId = self.last_node_for_agent[agent[0]]
-                destNodeId = path[0]
+                destNodeId = self.agents.getDestById(agent[0])
                 weight = self.graphAlgo.distanceOnEdge((sourceNodeId, destNodeId, 0), agent[1][1])
             else:
                 sourceNodeId = self.last_node_for_agent[agent[0]]
-                destNodeId = path[0]
+                destNodeId = self.agents.getDestById(agent[0])
                 weight = self.graphAlgo.distanceOnEdge((destNodeId, sourceNodeId, 0), self.agents.getPosById(agent[0]))
             speed = self.agents.getSpeedById(agent[0])
             Time = weight/speed
             MinTime = min(MinTime, Time)
+            logging.debug("Calculation: source - {}, dest - {}, weight - {}, speed - {}, Time - {}".format(sourceNodeId,destNodeId,weight,speed,Time))
         print(time(), ", ", time() + MinTime)
+        logging.debug("The Next Stop is in {} seconds".format(MinTime))
         return time() + MinTime

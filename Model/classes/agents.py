@@ -32,7 +32,12 @@ class Agents:
             if self.agents[i].id == Id:
                 return self.agents[i].speed
 
-    def getPosById(self,Id):
+    def getPosById(self, Id):
         for i in range(len(self.agents)):
             if self.agents[i].id == Id:
                 return self.agents[i].pos
+
+    def getDestById(self, Id):
+        for i in range(len(self.agents)):
+            if self.agents[i].id == Id:
+                return self.agents[i].dest
