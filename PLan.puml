@@ -1,20 +1,55 @@
 @startuml
 'https://plantuml.com/sequence-diagram
-
-class Model.DiGraph
-
-class Model.GraphAlgo{
-    loadFromJson()
-}
-class PyGame
-
 class Controller{
     - client
+    - GraphAlgo
+    - graph
+    - Agents
+    - Pokemon
+    determine_next_edges()
+    add_paths_to_agents()
+    add_agents()
+    test_algorithm()
+    calculateNextStopTime()
 }
 
-Controller --> PyGame
-Controller --> Model
-PyGame --> Controller
-Model --> Controller
+class DiGraph{
+    - EdgeSize
+    - nodes
+}
+
+class GraphAlgo{
+    - graph
+    load_from_json_string()
+    best_Path_foreach_agent()
+    PokemonPlacement()
+    distanceOnEdgeForAgent()
+    distanceOnEdge()
+    edgeByType()
+    closestEdges()
+
+}
+class GUI{
+    - debug
+    - cntrl
+    - agents
+    - pokemon
+    - timer
+    - points
+    - mc
+    MainRun()
+    drawTextBox()
+    drawNodes()
+    drawEdges()
+    drawPokemon()
+    drawAgent()
+}
+
+
+Controller --> GUI
+Controller --> GraphAlgo
+GraphAlgo --> Controller
+GraphAlgo --> DiGraph
+GUI --> Controller
 
 @enduml
