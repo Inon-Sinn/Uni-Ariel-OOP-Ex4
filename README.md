@@ -18,7 +18,7 @@ The target is to maximize the sum value of the pokemons caught, and that number 
 ## Out idea
 To solve the game we have declared a few methods that improve the grade.</br>
 1. Put the agents as close as best as we can to the highest valued pokemon.(refer to add_agents)
-2. Calculate all the paths for all the pokemons and for all agents, and take the best paths for each agent based on the time takes for this agent to reach that pokemon.(refer to best_paths_for_agents, and shortest_path algorithms)
+2. Calculate all the paths for all the pokemons and for all agents, and take the best paths for each agent based on the time takes for this agent to reach that pokemon.(refer to best_paths_for_agents algorithms)
 
 
 
@@ -27,8 +27,29 @@ To solve the game we have declared a few methods that improve the grade.</br>
 * When catching a pokemon calculate the best paths for the agents.
 
 
-## Additional visualization
+## Algorithms
+[best_paths_for_agents]()
+[add_agents]()
 
+
+## Classes used
+### controller
+This class's purpose is to controll all the algorithms and the client calls to the server. And is seperated completely from the GUI.
+### GUI
+This class's purpose is to visualize the game and provide information about the agents and nodes in real time.
+This class contains an instance of controller and lets the controller have all the communication with the server. Note that only the controller runs the algorithms and data transfers while the gui only contains controller for the purpose of getting the information and putting it on the screen.
+### agents and pokemons
+This classes provide a simple classes that hold data of the objects. It allows us to load from a json string all the objects into a list of the class's instance.
+### Graph classes and graph algorithms
+refer to [last Excersice](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex3/tree/master/src).
+
+## Additional visualization
+debugger mode:
+![image](https://user-images.githubusercontent.com/82415308/148687021-8c04d506-8e68-407a-bc16-c7fbe32cabe2.png)</br>
+regular but laggy mode:</br>
+![image](https://user-images.githubusercontent.com/82415308/148687050-1ee8c540-941f-468a-ad07-8b3cc328527c.png)
+
+we prefer to use the debugger mode as faster version
 
 ## How to run:
 Open cmd and enter the directory specified for the project within the cmd.</br>
