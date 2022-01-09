@@ -120,13 +120,8 @@ class controller:
                 self.add_paths_to_agents()
             elif (len(self.pokemon_for_agent[agent.id][0])) == 0:
                 self.add_paths_to_agents()
-        # print(self.cntrl.pokemon_for_agent)
-        # print(self.cntrl.client.get_agents())
         list_tup = self.determine_next_edges()  # list of (agent id, next node)
         self.insert_edges_to_client(list_tup)
-        self.ttl = float(self.client.time_to_end())
-        self.client.get_info()
-        # print(self.cntrl.ttl, self.cntrl.client.get_info())
         if moveTime <= time() - 0.1:
             self.client.move()
             return True

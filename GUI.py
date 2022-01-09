@@ -142,7 +142,7 @@ class Gui:
 
             # update the data
             if self.cntrl.test_algorithm(self.MoveTime):
-                self.MoveTime = time()
+                self.MoveTime = time() -0.1
                 self.update()
             # self.update(self.cntrl.pokemon_for_agent[0][0], self.cntrl.pokemon_for_agent[0][1],
             #             int(self.cntrl.ttl / 1000))
