@@ -78,6 +78,8 @@ Afterwards run **Ex4_main.py**.
 
 ![server-client](https://user-images.githubusercontent.com/82415308/148679719-4408d648-57b2-4784-bd1b-cf04bab1db79.png)
 
+## UML
+![image](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Images/PLan.png)
 
 
 ## Contributers
