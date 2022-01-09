@@ -60,7 +60,7 @@ This classes provide a simple classes that hold data of the objects. It allows u
 ### [Graph classes and graph algorithms](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/tree/master/Model)
 refer to [last Excersice](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex3/tree/master/src).
 
-## [Video of the GUI running on case 11](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Ex4_Video_case11.zip)
+## [Video of the GUI running on case 11](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/screen-capture.zip)
 
 ## Additional visualization
 debugger mode:
