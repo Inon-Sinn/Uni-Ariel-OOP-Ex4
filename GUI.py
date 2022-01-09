@@ -1,8 +1,11 @@
+import math
+
 from pygame import gfxdraw
 import pygame
 
 from Model.Controller import controller
 from Model.Graph_Algo import GraphAlgo
+from time import time
 
 pygame.init()
 
@@ -115,10 +118,20 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        #self.cntrl.add_paths_to_agents()
-        self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
-        # get the time of arrival
         self.cntrl.client.start()
+
+        # Choose the next edges
+        self.cntrl.add_paths_to_agents()
+        # self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
+
+        # do the Moves
+        self.cntrl.client.move()
+        self.MoveTime = time()
+
+        # Calculate the arriving time
+        # self.TimeToArival = 0.1
+        # self.CalculateTheTime()
+
         while True:
             for gui_event in pygame.event.get():
                 if gui_event.type == pygame.QUIT:
@@ -138,6 +151,9 @@ class Gui:
             self.update(0, 0, int(self.cntrl.ttl / 1000))
 
             # update the data
+            if time() >= self.MoveTime + 0.1:
+                self.cntrl.add_paths_to_agents()
+                self.MoveTime = time()
             # self.updateController()
 
             # refresh surface and Background
@@ -300,6 +316,18 @@ class Gui:
         if self.timer > int(self.cntrl.ttl / 1000):
             self.cntrl.client.move()
         self.update(0, 0, int(self.cntrl.ttl / 1000))
+
+    # def CalculateTheTime(self):
+    #     time = math.inf
+    #
+    #     # time to get to the next node
+    #     for agent in self.cntrl.pokemon_for_agent.items():
+    #         speed = self.cntrl.agents.getSpeedById(agent[0])
+    #         # if one is about to catch a pokemon
+    #         if len(agent[1][0]) == 1:
+    #             currtime = agent[1][2]/speed
+    #         else self
+    #         agentTime =
 
 
 class StopButton:  # TODO Doesnt work currently
