@@ -2,6 +2,7 @@ import json
 
 
 class Agent:
+    """A class that represent a Agent"""
     def __init__(self, id, value, src, dest, speed, pos):
         self.id = id
         self.value = value
@@ -12,7 +13,7 @@ class Agent:
 
 
 class Agents:
-
+    """A class that represnt a group of agents"""
     def __init__(self, jsonString):
         self.agents = []
         agents_dict = json.loads(jsonString)

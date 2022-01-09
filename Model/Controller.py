@@ -20,6 +20,9 @@ import random
 
 class controller:
 
+    """The Controller Class is the one that decide what to do at situation and is the only one with a connection to
+    the client """
+
     def __init__(self):
 
         ip = '127.0.0.1'
@@ -67,6 +70,7 @@ class controller:
         self.pokemons = Pokemons(pokemons_json)
 
     def add_agents(self):
+        """Adds the agents at the best place at the beginning of the game"""
         # get the amount of agents in this game - n
         info = json.loads(self.client.get_info())
         n = info['GameServer']['agents']
@@ -115,9 +119,11 @@ class controller:
                 #     '{\"agent_id\":' + str(tup[0]) + ', \"next_node_id\":' + str(tup[1]) + '}')
 
     def move_agents(self):
+        """Tells the server to move"""
         self.client.move()
 
     def add_paths_to_agents(self):
+        """Adds the path to the agent in the correct way"""
         d = self.graphAlgo.best_Path_foreach_agent(self.agents, self.pokemons)
         for member in d.keys():
             for agent in self.agents.agents:
@@ -126,6 +132,7 @@ class controller:
 
 
     def test_algorithm(self):
+        """Calculates the paths each agents should take"""
         self.update_Agents()
         self.update_Pokemons()
         for agent in self.agents.agents:
@@ -138,24 +145,38 @@ class controller:
         self.ttl = float(self.client.time_to_end())
 
     def calculateNextStopTime(self):
+        """Calculate when is the next time we should tell the server to move"""
         MinTime = math.inf
         for agent in self.pokemon_for_agent.items():
+            if self.agents.getDestById(agent[0]) == -1:
+                self.test_algorithm()
+                self.update_Agents()
             path = agent[1][0]
             weight = 0
             # Next Node is Pokemon
             logging.debug(agent[1])
             if len(path) == 0:
+                logging.info("Next One Is A Pokemon")
                 sourceNodeId = self.last_node_for_agent[agent[0]]
                 destNodeId = self.agents.getDestById(agent[0])
-                weight = self.graphAlgo.distanceOnEdge((sourceNodeId, destNodeId, 0), agent[1][1])
+                logging.debug("source - {}, dest - {}".format(sourceNodeId, destNodeId))
+                weightPok = self.graphAlgo.distanceOnEdge((sourceNodeId, destNodeId, 0), agent[1][1])
+                weightAgent = self.graphAlgo.distanceOnEdge((sourceNodeId, destNodeId, 0), self.agents.getPosById(agent[0]))
+                logging.debug("weight of Pokemon: {}, weigh of Agent {}".format(weightPok,weightAgent))
+                if weightPok > weightAgent:
+                    weight = weightPok
+                else:
+                    weight = self.graphAlgo.distanceOnEdge((destNodeId,sourceNodeId,0), self.agents.getPosById(agent[0]))
             else:
+                logging.info("Next One Is A Node")
                 sourceNodeId = self.last_node_for_agent[agent[0]]
                 destNodeId = self.agents.getDestById(agent[0])
-                weight = self.graphAlgo.distanceOnEdge((destNodeId, sourceNodeId, 0), self.agents.getPosById(agent[0]))
+                logging.debug("source - {}, dest - {}".format(sourceNodeId, destNodeId))
+                weight = self.graphAlgo.distanceOnEdgeForAgent((destNodeId, sourceNodeId, 0), self.agents.getPosById(agent[0]))
             speed = self.agents.getSpeedById(agent[0])
             Time = weight/speed
             MinTime = min(MinTime, Time)
             logging.debug("Calculation: source - {}, dest - {}, weight - {}, speed - {}, Time - {}".format(sourceNodeId,destNodeId,weight,speed,Time))
-        print(time(), ", ", time() + MinTime)
         logging.debug("The Next Stop is in {} seconds".format(MinTime))
         return time() + MinTime
+

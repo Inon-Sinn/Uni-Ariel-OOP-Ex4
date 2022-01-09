@@ -2,6 +2,7 @@ import json
 
 
 class Pokemon:
+    """A Class the represent a pokemon"""
     def __init__(self, value, type, pos):
         self.value = value
         self.type = type
@@ -9,6 +10,7 @@ class Pokemon:
 
 
 class Pokemons:
+    """A class that represent a group of pokemon"""
     def __init__(self, jsonString):
         self.pokemons = []
         pokemonss = json.loads(jsonString)

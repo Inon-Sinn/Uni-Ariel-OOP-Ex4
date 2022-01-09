@@ -53,6 +53,7 @@ class Gui:
         self.debug = debug
         self.running = True
 
+
         # screen variables
         self.screen = pygame.display.set_mode((width, height), depth=32, flags=pygame.constants.RESIZABLE)
         self.margin = self.screen.get_height() / 10
@@ -120,10 +121,12 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
+
         self.cntrl.client.start()
-        self.cntrl.move_agents()
         self.cntrl.test_algorithm()
+        self.cntrl.move_agents()
         self.NextStop = time()
+        self.TotalTime =int((float)(self.cntrl.client.time_to_end())/1000) +1
 
         while True:
             for gui_event in pygame.event.get():
@@ -140,11 +143,15 @@ class Gui:
                             self.running = True
 
             # update the data
-            if time() >= self.NextStop:
+            if time() >= self.NextStop and self.mc < self.TotalTime*10:
                 self.cntrl.move_agents()
                 self.cntrl.test_algorithm()
+                self.cntrl.move_agents()
+                self.cntrl.update_Agents()
+                self.cntrl.update_Pokemons()
                 self.NextStop = self.cntrl.calculateNextStopTime()
                 self.update()
+
 
             # self.update(self.cntrl.pokemon_for_agent[0][0], self.cntrl.pokemon_for_agent[0][1],
             #             int(self.cntrl.ttl / 1000))
@@ -320,8 +327,3 @@ class StopButton:
             return True
         return False
 
-
-if __name__ == '__main__':
-    algo = GraphAlgo()
-    algo.load_from_json("data/A3")
-    test = Gui(WIDTH, HEIGHT, debug=True)

@@ -71,6 +71,26 @@ class GraphAlgo(GraphInterface):
         res = self.graph.getNode(edge[0]).all_out_edges.get(edge[1])
         return res * part
 
+    def distanceOnEdgeForAgent(self, edge, pos) -> float:
+        """Given the edge and the pokemon position it calculate its distance
+        by to the weight of the edge in the Graph """
+        # Build the points
+        src_pos = self.graph.getNode(edge[0]).pos
+        pt_src = np.array([src_pos[0], src_pos[1]])
+        dest_pos = self.graph.getNode(edge[1]).pos
+        pt_dest = np.array([dest_pos[0], dest_pos[1]])
+        pt_pok = np.array([pos[0], pos[1]])
+
+        dist_src_pos = np.abs(norm(pt_src - pt_pok))
+        dist_src_dest = np.abs(norm(pt_src - pt_dest))
+        if edge[2] == 0:
+            part = (dist_src_pos / dist_src_dest)
+        else:
+            dist = math.sqrt((dist_src_pos * dist_src_pos) - (edge[2] * edge[2]))
+            part = (dist / dist_src_dest)
+        res = self.graph.getNode(edge[1]).all_out_edges.get(edge[0])
+        return res * part
+
     def PokemonPlacement(self, type, pos) -> tuple:
         """Given a pokemon's position and type it returns the edges it on and the distance on the edge itself"""
         edgeDistances = self.closestEdges(pos)

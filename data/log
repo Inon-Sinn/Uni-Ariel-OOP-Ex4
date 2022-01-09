@@ -1,5 +1,329 @@
 INFO:root:our First Message
-DEBUG:root:([8], (35.197656770719604, 32.10191878639921), 2.1902953146103403)
-DEBUG:root:Calculation: source - 9, dest - 8, weight - 1.8514169345430864, speed - 1.0, Time - 1.8514169345430864
-DEBUG:root:The Next Stop is in 1.8514169345430864 seconds
-DEBUG:root:([], (35.197656770719604, 32.10191878639921), 2.1902953146103403)
+DEBUG:root:([], (35.197656770719604, 32.10191878639921), 0.33887838006725396)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 9, dest - 8
+DEBUG:root:weight of Pokemon: 0.33887838006725396, weigh of Agent 0.0040000000005493575
+DEBUG:root:Calculation: source - 9, dest - 8, weight - 0.33887838006725396, speed - 1.0, Time - 0.33887838006725396
+DEBUG:root:The Next Stop is in 0.33887838006725396 seconds
+DEBUG:root:([], (35.197656770719604, 32.10191878639921), 0.33887838006725396)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 9, dest - 8
+DEBUG:root:weight of Pokemon: 0.33887838006725396, weigh of Agent 0.3719999999997345
+DEBUG:root:Calculation: source - 9, dest - 8, weight - 1.3798393045428796, speed - 1.0, Time - 1.3798393045428796
+DEBUG:root:The Next Stop is in 1.3798393045428796 seconds
+DEBUG:root:([6, 5, 4, 3], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 8, dest - 7
+DEBUG:root:Calculation: source - 8, dest - 7, weight - 1.6449953452844968, speed - 1.0, Time - 1.6449953452844968
+DEBUG:root:The Next Stop is in 1.6449953452844968 seconds
+DEBUG:root:([5, 4, 3], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 7, dest - 6
+DEBUG:root:Calculation: source - 7, dest - 6, weight - 1.0176531013725074, speed - 1.0, Time - 1.0176531013725074
+DEBUG:root:The Next Stop is in 1.0176531013725074 seconds
+DEBUG:root:([4, 3], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 6, dest - 5
+DEBUG:root:Calculation: source - 6, dest - 5, weight - 1.6667173820543677, speed - 1.0, Time - 1.6667173820543677
+DEBUG:root:The Next Stop is in 1.6667173820543677 seconds
+DEBUG:root:([3], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 5, dest - 4
+DEBUG:root:Calculation: source - 5, dest - 4, weight - 1.4622464066335845, speed - 1.0, Time - 1.4622464066335845
+DEBUG:root:The Next Stop is in 1.4622464066335845 seconds
+DEBUG:root:([], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 4, dest - 3
+DEBUG:root:weight of Pokemon: 0.617811251546046, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 4, dest - 3, weight - 0.617811251546046, speed - 1.0, Time - 0.617811251546046
+DEBUG:root:The Next Stop is in 0.617811251546046 seconds
+DEBUG:root:([], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 4, dest - 3
+DEBUG:root:weight of Pokemon: 0.617811251546046, weigh of Agent 0.6329999999991802
+DEBUG:root:Calculation: source - 4, dest - 3, weight - 0.8225754403396278, speed - 1.0, Time - 0.8225754403396278
+DEBUG:root:The Next Stop is in 0.8225754403396278 seconds
+DEBUG:root:([], (35.199963710098416, 32.105723673136964), 6.4104234868916325)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 4, dest - 3
+DEBUG:root:weight of Pokemon: 0.617811251546046, weigh of Agent 1.4620000000004478
+DEBUG:root:Calculation: source - 4, dest - 3, weight - 0.026862952672473274, speed - 1.0, Time - 0.026862952672473274
+DEBUG:root:The Next Stop is in 0.026862952672473274 seconds
+DEBUG:root:([], (35.195224052340706, 32.10575624080796), 0.6144120994230777)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.6144120994230777, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.6144120994230777, speed - 1.0, Time - 0.6144120994230777
+DEBUG:root:The Next Stop is in 0.6144120994230777 seconds
+DEBUG:root:([], (35.195224052340706, 32.10575624080796), 0.6144120994230777)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.6144120994230777, weigh of Agent 0.658999999999861
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.45721552199415916, speed - 1.0, Time - 0.45721552199415916
+DEBUG:root:The Next Stop is in 0.45721552199415916 seconds
+DEBUG:root:([], (35.19038634163924, 32.10748920705224), 1.3578175667344972)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:weight of Pokemon: 1.3578175667344972, weigh of Agent 0.0009999999998605612
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 1.3578175667344972, speed - 1.0, Time - 1.3578175667344972
+DEBUG:root:The Next Stop is in 1.3578175667344972 seconds
+DEBUG:root:([], (35.19038634163924, 32.10748920705224), 1.3578175667344972)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:weight of Pokemon: 1.3578175667344972, weigh of Agent 1.3719999999988357
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 0.35342577319806157, speed - 1.0, Time - 0.35342577319806157
+DEBUG:root:The Next Stop is in 0.35342577319806157 seconds
+DEBUG:root:([3, 4, 3], (35.1992728373109, 32.105605979924384), 5.203627355682907)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 1, dest - 2
+DEBUG:root:Calculation: source - 1, dest - 2, weight - 1.7646903245689283, speed - 1.0, Time - 1.7646903245689283
+DEBUG:root:The Next Stop is in 1.7646903245689283 seconds
+DEBUG:root:([4, 3], (35.1992728373109, 32.105605979924384), 5.203627355682907)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 3
+DEBUG:root:Calculation: source - 2, dest - 3, weight - 1.1435447583365383, speed - 1.0, Time - 1.1435447583365383
+DEBUG:root:The Next Stop is in 1.1435447583365383 seconds
+DEBUG:root:([3], (35.1992728373109, 32.105605979924384), 5.203627355682907)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 3, dest - 4
+DEBUG:root:Calculation: source - 3, dest - 4, weight - 1.4301580756736283, speed - 1.0, Time - 1.4301580756736283
+DEBUG:root:The Next Stop is in 1.4301580756736283 seconds
+DEBUG:root:([], (35.1992728373109, 32.105605979924384), 5.203627355682907)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 4, dest - 3
+DEBUG:root:weight of Pokemon: 0.8652341971038123, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 4, dest - 3, weight - 0.8652341971038123, speed - 1.0, Time - 0.8652341971038123
+DEBUG:root:The Next Stop is in 0.8652341971038123 seconds
+DEBUG:root:([], (35.1992728373109, 32.105605979924384), 5.203627355682907)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.46319223157186196, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.46319223157186196, speed - 2.0, Time - 0.23159611578593098
+DEBUG:root:The Next Stop is in 0.23159611578593098 seconds
+DEBUG:root:([1, 0], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.6160094622808935, speed - 2.0, Time - 0.30800473114044674
+DEBUG:root:The Next Stop is in 0.30800473114044674 seconds
+DEBUG:root:([0], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 1.7155926739282625, speed - 2.0, Time - 0.8577963369641313
+DEBUG:root:The Next Stop is in 0.8577963369641313 seconds
+DEBUG:root:([], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6001768988622704, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.6001768988622704, speed - 2.0, Time - 0.3000884494311352
+DEBUG:root:The Next Stop is in 0.3000884494311352 seconds
+DEBUG:root:([], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6001768988622704, weigh of Agent 0.6280000000010811
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.9347349590816015, speed - 2.0, Time - 0.46736747954080077
+DEBUG:root:The Next Stop is in 0.46736747954080077 seconds
+DEBUG:root:([], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6001768988622704, weigh of Agent 1.570000000000078
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.23616763169175006, speed - 2.0, Time - 0.11808381584587503
+DEBUG:root:The Next Stop is in 0.11808381584587503 seconds
+DEBUG:root:([], (35.18893516072167, 32.10655929420479), 1.7068895175354712)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6001768988622704, weigh of Agent 1.8399999999998258
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.0359413276627855, speed - 2.0, Time - 0.01797066383139275
+DEBUG:root:The Next Stop is in 0.01797066383139275 seconds
+DEBUG:root:([9, 8, 7], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 0, dest - 10
+DEBUG:root:Calculation: source - 0, dest - 10, weight - 1.4600268165056454, speed - 2.0, Time - 0.7300134082528227
+DEBUG:root:The Next Stop is in 0.7300134082528227 seconds
+DEBUG:root:([8, 7], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 10, dest - 9
+DEBUG:root:Calculation: source - 10, dest - 9, weight - 1.0887225789883779, speed - 2.0, Time - 0.5443612894941889
+DEBUG:root:The Next Stop is in 0.5443612894941889 seconds
+DEBUG:root:([7], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 9, dest - 8
+DEBUG:root:Calculation: source - 9, dest - 8, weight - 1.4575484853801393, speed - 2.0, Time - 0.7287742426900696
+DEBUG:root:The Next Stop is in 0.7287742426900696 seconds
+DEBUG:root:([], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 8, dest - 7
+DEBUG:root:weight of Pokemon: 0.8484959537484007, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 8, dest - 7, weight - 0.8484959537484007, speed - 2.0, Time - 0.42424797687420035
+DEBUG:root:The Next Stop is in 0.42424797687420035 seconds
+DEBUG:root:([], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 8, dest - 7
+DEBUG:root:weight of Pokemon: 0.8484959537484007, weigh of Agent 0.8579999999999175
+DEBUG:root:Calculation: source - 8, dest - 7, weight - 0.6482064354263134, speed - 2.0, Time - 0.3241032177131567
+DEBUG:root:The Next Stop is in 0.3241032177131567 seconds
+DEBUG:root:([], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 8, dest - 7
+DEBUG:root:weight of Pokemon: 0.8484959537484007, weigh of Agent 1.5399999999999316
+DEBUG:root:Calculation: source - 8, dest - 7, weight - 0.08647911186647836, speed - 2.0, Time - 0.04323955593323918
+DEBUG:root:The Next Stop is in 0.04323955593323918 seconds
+DEBUG:root:([], (35.20539663533063, 32.10283686555705), 2.428396917312738)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 7, dest - 6
+DEBUG:root:weight of Pokemon: 0.9595701201170201, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 7, dest - 6, weight - 0.9595701201170201, speed - 2.0, Time - 0.47978506005851007
+DEBUG:root:The Next Stop is in 0.47978506005851007 seconds
+DEBUG:root:([5, 4, 3], (35.19974476565152, 32.105686374989176), 2.42191946501114)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 7, dest - 6
+DEBUG:root:Calculation: source - 7, dest - 6, weight - 0.0336531013718118, speed - 2.0, Time - 0.0168265506859059
+DEBUG:root:The Next Stop is in 0.0168265506859059 seconds
+DEBUG:root:([4, 3], (35.19974476565152, 32.105686374989176), 2.42191946501114)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 6, dest - 5
+DEBUG:root:Calculation: source - 6, dest - 5, weight - 1.6657173820573987, speed - 2.0, Time - 0.8328586910286994
+DEBUG:root:The Next Stop is in 0.8328586910286994 seconds
+DEBUG:root:([3], (35.19974476565152, 32.105686374989176), 2.42191946501114)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 5, dest - 4
+DEBUG:root:Calculation: source - 5, dest - 4, weight - 1.4622464066335845, speed - 2.0, Time - 0.7311232033167923
+DEBUG:root:The Next Stop is in 0.7311232033167923 seconds
+DEBUG:root:([], (35.19974476565152, 32.105686374989176), 2.42191946501114)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 4, dest - 3
+DEBUG:root:weight of Pokemon: 0.696222039961191, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 4, dest - 3, weight - 0.696222039961191, speed - 2.0, Time - 0.3481110199805955
+DEBUG:root:The Next Stop is in 0.3481110199805955 seconds
+DEBUG:root:([], (35.19974476565152, 32.105686374989176), 2.42191946501114)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.5884980359440108, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.5884980359440108, speed - 5.0, Time - 0.11769960718880217
+DEBUG:root:The Next Stop is in 0.11769960718880217 seconds
+DEBUG:root:([1, 0, 1], (35.188500771222955, 32.10570047767076), 1.0723964426043264)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.42300946228100544, speed - 5.0, Time - 0.08460189245620109
+DEBUG:root:The Next Stop is in 0.08460189245620109 seconds
+DEBUG:root:([0, 1], (35.188500771222955, 32.10570047767076), 1.0723964426043264)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 1.7155926739282625, speed - 5.0, Time - 0.3431185347856525
+DEBUG:root:The Next Stop is in 0.3431185347856525 seconds
+DEBUG:root:([1], (35.188500771222955, 32.10570047767076), 1.0723964426043264)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 1.8884659521433524, speed - 5.0, Time - 0.3776931904286705
+DEBUG:root:The Next Stop is in 0.3776931904286705 seconds
+DEBUG:root:([], (35.188500771222955, 32.10570047767076), 1.0723964426043264)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 0, dest - 1
+DEBUG:root:weight of Pokemon: 0.6599141246696067, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 0, dest - 1, weight - 0.6599141246696067, speed - 5.0, Time - 0.13198282493392136
+DEBUG:root:The Next Stop is in 0.13198282493392136 seconds
+DEBUG:root:([], (35.188500771222955, 32.10570047767076), 1.0723964426043264)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 0, dest - 1
+DEBUG:root:weight of Pokemon: 0.6599141246696067, weigh of Agent 0.6800000000001323
+DEBUG:root:Calculation: source - 0, dest - 1, weight - 0.9715035136152717, speed - 5.0, Time - 0.19430070272305433
+DEBUG:root:The Next Stop is in 0.19430070272305433 seconds
+DEBUG:root:([3, 2], (35.19565793847981, 32.10567199049591), 0.6813914436031843)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 1, dest - 2
+DEBUG:root:Calculation: source - 1, dest - 2, weight - 1.7646903245689283, speed - 5.0, Time - 0.35293806491378565
+DEBUG:root:The Next Stop is in 0.35293806491378565 seconds
+DEBUG:root:([2], (35.19565793847981, 32.10567199049591), 0.6813914436031843)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 3
+DEBUG:root:Calculation: source - 2, dest - 3, weight - 1.1435447583365383, speed - 5.0, Time - 0.22870895166730768
+DEBUG:root:The Next Stop is in 0.22870895166730768 seconds
+DEBUG:root:([], (35.19565793847981, 32.10567199049591), 0.6813914436031843)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.49872213511045405, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.49872213511045405, speed - 5.0, Time - 0.09974442702209081
+DEBUG:root:The Next Stop is in 0.09974442702209081 seconds
+DEBUG:root:([], (35.19565793847981, 32.10567199049591), 0.6813914436031843)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.49872213511045405, weigh of Agent 0.5950000000002708
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.5238696511681203, speed - 5.0, Time - 0.10477393023362407
+DEBUG:root:The Next Stop is in 0.10477393023362407 seconds
+DEBUG:root:([0], (35.188827745913414, 32.10634692808267), 0.48285758504501874)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 1.7105926739291886, speed - 5.0, Time - 0.3421185347858377
+DEBUG:root:The Next Stop is in 0.3421185347858377 seconds
+DEBUG:root:([], (35.188827745913414, 32.10634692808267), 0.48285758504501874)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6986952512968314, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.6986952512968314, speed - 5.0, Time - 0.13973905025936628
+DEBUG:root:The Next Stop is in 0.13973905025936628 seconds
+DEBUG:root:([], (35.188827745913414, 32.10634692808267), 0.48285758504501874)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6986952512968314, weigh of Agent 0.780000000000723
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.8220149657024929, speed - 5.0, Time - 0.16440299314049858
+DEBUG:root:The Next Stop is in 0.16440299314049858 seconds
+DEBUG:root:([], (35.188827745913414, 32.10634692808267), 0.48285758504501874)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6986952512968314, weigh of Agent 1.6099999999998553
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.20650447553944837, speed - 5.0, Time - 0.041300895107889674
+DEBUG:root:The Next Stop is in 0.041300895107889674 seconds
+DEBUG:root:([], (35.188827745913414, 32.10634692808267), 0.48285758504501874)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 1, dest - 0
+DEBUG:root:weight of Pokemon: 0.6986952512968314, weigh of Agent 1.8649999999983666
+DEBUG:root:Calculation: source - 1, dest - 0, weight - 0.01740185506857582, speed - 5.0, Time - 0.003480371013715164
+DEBUG:root:The Next Stop is in 0.003480371013715164 seconds
+DEBUG:root:([0], (35.18867176864414, 32.103663427809636), 0.356730509990395)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 0, dest - 10
+DEBUG:root:Calculation: source - 0, dest - 10, weight - 1.4620268165085584, speed - 5.0, Time - 0.2924053633017117
+DEBUG:root:The Next Stop is in 0.2924053633017117 seconds
+DEBUG:root:([], (35.18867176864414, 32.103663427809636), 0.356730509990395)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 10, dest - 0
+DEBUG:root:weight of Pokemon: 0.32162573344341683, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 10, dest - 0, weight - 0.32162573344341683, speed - 5.0, Time - 0.06432514668868336
+DEBUG:root:The Next Stop is in 0.06432514668868336 seconds
+DEBUG:root:([], (35.18867176864414, 32.103663427809636), 0.356730509990395)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 10, dest - 0
+DEBUG:root:weight of Pokemon: 0.32162573344341683, weigh of Agent 0.4100000000021283
+DEBUG:root:Calculation: source - 10, dest - 0, weight - 0.9523602676432833, speed - 5.0, Time - 0.19047205352865665
+DEBUG:root:The Next Stop is in 0.19047205352865665 seconds
+DEBUG:root:([2, 3, 2], (35.19580080140219, 32.10564424993287), 0.9538622463662575)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 0, dest - 1
+DEBUG:root:Calculation: source - 0, dest - 1, weight - 1.4004465106761335, speed - 5.0, Time - 0.2800893021352267
+DEBUG:root:The Next Stop is in 0.2800893021352267 seconds
+DEBUG:root:([3, 2], (35.19580080140219, 32.10564424993287), 0.9538622463662575)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 1, dest - 2
+DEBUG:root:Calculation: source - 1, dest - 2, weight - 1.7646903245689283, speed - 5.0, Time - 0.35293806491378565
+DEBUG:root:The Next Stop is in 0.35293806491378565 seconds
+DEBUG:root:([2], (35.19580080140219, 32.10564424993287), 0.9538622463662575)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 3
+DEBUG:root:Calculation: source - 2, dest - 3, weight - 1.1435447583365383, speed - 5.0, Time - 0.22870895166730768
+DEBUG:root:The Next Stop is in 0.22870895166730768 seconds
+DEBUG:root:([], (35.19580080140219, 32.10564424993287), 0.9538622463662575)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.4606296382496881, weigh of Agent 0.0
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.4606296382496881, speed - 5.0, Time - 0.09212592764993763
+DEBUG:root:The Next Stop is in 0.09212592764993763 seconds
+DEBUG:root:([], (35.19580080140219, 32.10564424993287), 0.9538622463662575)
+INFO:root:Next One Is A Pokemon
+DEBUG:root:source - 3, dest - 2
+DEBUG:root:weight of Pokemon: 0.4606296382496881, weigh of Agent 0.7149999999991482
+DEBUG:root:Calculation: source - 3, dest - 2, weight - 0.39889315896731237, speed - 5.0, Time - 0.07977863179346248
+DEBUG:root:The Next Stop is in 0.07977863179346248 seconds
+DEBUG:root:([0], (35.188081181912885, 32.104870922080536), 0.6198037966749934)
+INFO:root:Next One Is A Node
+DEBUG:root:source - 2, dest - 1
+DEBUG:root:Calculation: source - 2, dest - 1, weight - 1.7155926739282625, speed - 5.0, Time - 0.3431185347856525
+DEBUG:root:The Next Stop is in 0.3431185347856525 seconds
