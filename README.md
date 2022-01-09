@@ -28,7 +28,12 @@ To solve the game we have declared a few methods that improve the grade.</br>
 
 
 ## Additional visualization
+debugger mode:
+![image](https://user-images.githubusercontent.com/82415308/148687021-8c04d506-8e68-407a-bc16-c7fbe32cabe2.png)
+regular but laggy mode:
+![image](https://user-images.githubusercontent.com/82415308/148687050-1ee8c540-941f-468a-ad07-8b3cc328527c.png)
 
+we prefer to use the debugger mode as faster version
 
 ## How to run:
 Open cmd and enter the directory specified for the project within the cmd.</br>
