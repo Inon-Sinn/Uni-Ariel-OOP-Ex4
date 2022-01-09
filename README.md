@@ -32,7 +32,7 @@ To solve the game we have declared a few methods that improve the grade.</br>
 
 ## How to run:
 Open cmd and enter the directory specified for the project within the cmd.</br>
-Type in: java -jar Ex4_Server_v0.0.jar [case] </br>
+Type in: **java -jar Ex4_Server_v0.0.jar [case]**, replace case with number 0 - 15 </br> 
 Afterwards run GUI.py.
 
 
