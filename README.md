@@ -15,7 +15,7 @@ The target is to maximize the sum value of the pokemons caught, and that number 
 * Each Pokemon has position, value, type.
 
 
-## Out idea
+## Our idea
 To solve the game we have declared a few methods that improve the grade.</br>
 1. Put the agents as close as best as we can to the highest valued pokemon.(refer to add_agents)
 2. Calculate all the paths for all the pokemons and for all agents, and take the best paths for each agent based on the time takes for this agent to reach that pokemon.(refer to best_paths_for_agents algorithms)
