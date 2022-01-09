@@ -80,8 +80,8 @@ Afterwards run GUI.py.
 
 ## Contributers
 [Yan](https://github.com/Yannnyan) </br>
-[Inon]() </br>
-[Yaron]() </br>
+[Inon](https://github.com/Inon-Sinn) </br>
+[Yaron](https://github.com/Yaron-S) </br>
 
 
 
