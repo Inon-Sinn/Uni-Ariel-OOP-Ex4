@@ -28,9 +28,16 @@ To solve the game we have declared a few methods that improve the grade.</br>
 
 
 ## Algorithms
-[best_paths_for_agents]()
-[add_agents]()
-
+### [best_paths_for_agents](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20best_Path_foreach_agent(self%2C%20agents%3A%20list%2C%20pokemons%3A%20list)%20%2D%3E%20dict%3A)
+Finds the best paths for all agents.
+### [add_agents](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Controller.py#:~:text=def%20add_agents(self)%3A)
+Allocates the best position for the agents to start with.
+### [distanceOnEdge](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20distanceOnEdge(self%2C%20edge%2C%20pos)%20%2D%3E%20float%3A)
+Given the edge and the pokemon position it calculate its distance by to the weight of the edge in the Graph
+### [closestEdges](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20closestEdges(self%2C%20pos)%20%2D%3E%20list%3A)
+Return a sorted list of the edges closest to the pokemon.
+### [PokemonPlacement](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20PokemonPlacement(self%2C%20type%2C%20pos)%20%2D%3E%20tuple%3A)
+Given a pokemon's position and type it returns the edges it on and the distance on the edge itself.
 
 ## Classes used
 ### controller
