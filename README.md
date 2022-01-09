@@ -28,31 +28,42 @@ To solve the game we have declared a few methods that improve the grade.</br>
 
 
 ## Algorithms
+
 ### [best_paths_for_agents](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20best_Path_foreach_agent(self%2C%20agents%3A%20list%2C%20pokemons%3A%20list)%20%2D%3E%20dict%3A)
+
 Finds the best paths for all agents.
 ### [add_agents](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Controller.py#:~:text=def%20add_agents(self)%3A)
+
 Allocates the best position for the agents to start with.
 ### [distanceOnEdge](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20distanceOnEdge(self%2C%20edge%2C%20pos)%20%2D%3E%20float%3A)
+
 Given the edge and the pokemon position it calculate its distance by to the weight of the edge in the Graph
 ### [closestEdges](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20closestEdges(self%2C%20pos)%20%2D%3E%20list%3A)
+
 Return a sorted list of the edges closest to the pokemon.
 ### [PokemonPlacement](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex4/blob/master/Model/Graph_Algo.py#:~:text=def%20PokemonPlacement(self%2C%20type%2C%20pos)%20%2D%3E%20tuple%3A)
+
 Given a pokemon's position and type it returns the edges it on and the distance on the edge itself.
 
 ## Classes used
+
 ### controller
 This class's purpose is to controll all the algorithms and the client calls to the server. And is seperated completely from the GUI.
+
 ### GUI
 This class's purpose is to visualize the game and provide information about the agents and nodes in real time.
 This class contains an instance of controller and lets the controller have all the communication with the server. Note that only the controller runs the algorithms and data transfers while the gui only contains controller for the purpose of getting the information and putting it on the screen.
+
 ### agents and pokemons
 This classes provide a simple classes that hold data of the objects. It allows us to load from a json string all the objects into a list of the class's instance.
+
 ### Graph classes and graph algorithms
 refer to [last Excersice](https://github.com/Inon-Sinn/Uni-Ariel-OOP-Ex3/tree/master/src).
 
 ## Additional visualization
 debugger mode:
 ![image](https://user-images.githubusercontent.com/82415308/148687021-8c04d506-8e68-407a-bc16-c7fbe32cabe2.png)</br>
+
 regular but laggy mode:</br>
 ![image](https://user-images.githubusercontent.com/82415308/148687050-1ee8c540-941f-468a-ad07-8b3cc328527c.png)
 
@@ -62,6 +73,7 @@ we prefer to use the debugger mode as faster version
 Open cmd and enter the directory specified for the project within the cmd.</br>
 Type in: **java -jar Ex4_Server_v0.0.jar [case]**, replace case with number 0 - 15 </br> 
 Afterwards run GUI.py.
+
 ![server-client](https://user-images.githubusercontent.com/82415308/148679719-4408d648-57b2-4784-bd1b-cf04bab1db79.png)
 
 
@@ -73,6 +85,6 @@ Afterwards run GUI.py.
 
 
 
-
 [links](https://github.com/benmoshe/OOP_2021/blob/main/Assignments/Ex4/links.txt)
+
 [style sheet readme](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
