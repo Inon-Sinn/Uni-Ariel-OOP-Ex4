@@ -31,9 +31,15 @@ class controller:
         self.add_agents()
         self.agents = Agents(self.client.get_agents())  # initialize agents and pokemons
 
-        self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos)}
+        self.pokemon_for_agent = {}  # dict of {agent.id : ( path to pokemon,pokemon.pos, pokemon_time)}
         for agent in self.agents.agents:
             self.pokemon_for_agent[agent.id] = ([], -1, math.inf)
+
+        self.last_node_for_agent = {}  # dict of {agent.id : node.id}
+        for agent in self.agents.agents:
+            self.last_node_for_agent[agent.id] = -1
+
+        self.times_to_move = []
 
         self.ttl = float(self.client.time_to_end())
         self.grade = 0
@@ -91,6 +97,7 @@ class controller:
             if agent.dest == -1:
                 if len(self.pokemon_for_agent[agent.id][0]) != 0:
                     nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
+                    self.last_node_for_agent.update(agent.id, nextnode)
                     tup = (agent.id, nextnode)
                     edges.append(tup)
                 else:

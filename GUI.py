@@ -314,7 +314,7 @@ class Gui:
         self.cntrl.ttl = float(self.cntrl.client.time_to_end())
         self.cntrl.client.get_info()
         # print(self.cntrl.ttl, self.cntrl.client.get_info())
-        if self.MoveTime <= time() - 0.1:
+        if self.MoveTime <= time():
             self.cntrl.client.move()
             self.MoveTime = time()
 
