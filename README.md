@@ -19,8 +19,6 @@ The target is to maximize the sum value of the pokemons caught, and that number 
 To solve the game we have declared a few methods that improve the grade.</br>
 1. Put the agents as close as best as we can to the highest valued pokemon.(refer to add_agents)
 2. Calculate all the paths for all the pokemons and for all agents, and take the best paths for each agent based on the time takes for this agent to reach that pokemon.(refer to best_paths_for_agents, and shortest_path algorithms)
-3. 
-4. 
 
 
 
@@ -29,13 +27,20 @@ To solve the game we have declared a few methods that improve the grade.</br>
 * When catching a pokemon calculate the best paths for the agents.
 
 
+## Additional visualization
+
+
+## How to run:
+Open cmd and enter the directory specified for the project within the cmd.</br>
+Type in: java -jar Ex4_Server_v0.0.jar [case] </br>
+Afterwards run GUI.py.
 
 
 
 ## Contributers
-[Yan](https://github.com/Yannnyan)
-[Inon]()
-[Yaron]()
+[Yan](https://github.com/Yannnyan) </br>
+[Inon]() </br>
+[Yaron]() </br>
 
 
 
