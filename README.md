@@ -34,6 +34,7 @@ To solve the game we have declared a few methods that improve the grade.</br>
 Open cmd and enter the directory specified for the project within the cmd.</br>
 Type in: **java -jar Ex4_Server_v0.0.jar [case]**, replace case with number 0 - 15 </br> 
 Afterwards run GUI.py.
+![server-client](https://user-images.githubusercontent.com/82415308/148679719-4408d648-57b2-4784-bd1b-cf04bab1db79.png)
 
 
 
