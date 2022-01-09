@@ -3,6 +3,7 @@ import pygame
 
 from Model.Controller import controller
 from Model.Graph_Algo import GraphAlgo
+from time import time
 
 pygame.init()
 
@@ -85,7 +86,7 @@ class Gui:
         # variables
         pygame.display.set_caption('THIS CANT BE!! he has power level of 5000!!!')
         background = pygame.image.load("Images/pokemon_Map.jpg").convert_alpha()
-        BoxWidth = 8
+        BoxWidth = 4
         hd = 10  # Boxes Height divider
         bHdP = 4  # boxed height divider portion
 
@@ -115,9 +116,10 @@ class Gui:
         stop = StopButton(80, 100, ButtonTitleColor)
 
         # Start the Game
-        #self.cntrl.add_paths_to_agents()
+        # self.cntrl.add_paths_to_agents()
 
         # get the time of arrival
+        self.MoveTime = time()
         self.cntrl.client.start()
         while True:
             for gui_event in pygame.event.get():
@@ -130,12 +132,7 @@ class Gui:
                     if stop.check(click):
                         self.running = False
 
-            self.cntrl.update_Agents()
-            self.cntrl.update_Pokemons()
-            self.cntrl.client.choose_next_edge('{"agent_id":' + str(0) + ', "next_node_id":' + str(8) + '}')
-            self.cntrl.client.get_info()
-            self.cntrl.client.move()
-            self.update(0, 0, int(self.cntrl.ttl / 1000))
+            self.test_algorithm()
 
             # update the data
             # self.updateController()
@@ -200,7 +197,7 @@ class Gui:
             pygame.display.update()
 
             # refresh rate
-            clock.tick(120)
+            clock.tick(60)
 
     def drawTextBox(self, pos, height, width, text, TextColor, boxColor, boxOutlineColor, BoxOutlineWidth=1):
         """Draws the Text Box given the right input"""
@@ -300,6 +297,26 @@ class Gui:
         if self.timer > int(self.cntrl.ttl / 1000):
             self.cntrl.client.move()
         self.update(0, 0, int(self.cntrl.ttl / 1000))
+
+    def test_algorithm(self):
+        self.cntrl.update_Agents()
+        self.cntrl.update_Pokemons()
+        for agent in self.cntrl.agents.agents:
+            if self.cntrl.pokemon_for_agent.get(agent.id) is None:
+                self.cntrl.add_paths_to_agents()
+            elif (len(self.cntrl.pokemon_for_agent[agent.id][0])) == 0:
+                self.cntrl.add_paths_to_agents()
+        # print(self.cntrl.pokemon_for_agent)
+        # print(self.cntrl.client.get_agents())
+        list_tup = self.cntrl.determine_next_edges()  # list of (agent id, next node)
+        self.cntrl.insert_edges_to_client(list_tup)
+        self.update(self.cntrl.pokemon_for_agent[0][0], self.cntrl.pokemon_for_agent[0][1], int(self.cntrl.ttl / 1000))
+        self.cntrl.ttl = float(self.cntrl.client.time_to_end())
+        self.cntrl.client.get_info()
+        # print(self.cntrl.ttl, self.cntrl.client.get_info())
+        if self.MoveTime <= time() - 0.1:
+            self.cntrl.client.move()
+            self.MoveTime = time()
 
 
 class StopButton:  # TODO Doesnt work currently
