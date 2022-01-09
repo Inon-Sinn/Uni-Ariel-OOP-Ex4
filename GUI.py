@@ -121,6 +121,7 @@ class Gui:
 
         # Start the Game
         self.cntrl.client.start()
+        self.cntrl.move_agents()
         self.cntrl.test_algorithm()
         self.NextStop = time()
 
