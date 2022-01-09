@@ -74,7 +74,7 @@ we prefer to use the debugger mode as faster version
 ## How to run:
 Open cmd and enter the directory specified for the project within the cmd.</br>
 Type in: **java -jar Ex4_Server_v0.0.jar [case]**, replace case with number 0 - 15 </br> 
-Afterwards run GUI.py.
+Afterwards run **Ex4_main.py**.
 
 ![server-client](https://user-images.githubusercontent.com/82415308/148679719-4408d648-57b2-4784-bd1b-cf04bab1db79.png)
 
@@ -86,7 +86,6 @@ Afterwards run GUI.py.
 [Yaron](https://github.com/Yaron-S) </br>
 
 
+## External links
 
 [links](https://github.com/benmoshe/OOP_2021/blob/main/Assignments/Ex4/links.txt)
-
-[style sheet readme](https://docs.github.com/en/github/writing-on-github/getting-started-with-writing-and-formatting-on-github/basic-writing-and-formatting-syntax)
