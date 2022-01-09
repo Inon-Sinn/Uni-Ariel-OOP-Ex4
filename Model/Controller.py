@@ -97,11 +97,11 @@ class controller:
             if agent.dest == -1:
                 if len(self.pokemon_for_agent[agent.id][0]) != 0:
                     nextnode = (self.pokemon_for_agent[agent.id][0]).pop(0)
-                    self.last_node_for_agent.update(agent.id, nextnode)
+                    self.last_node_for_agent[agent.id] = agent.src
                     tup = (agent.id, nextnode)
                     edges.append(tup)
                 else:
-                    return None;
+                    return None
         return edges
         # insert algorithm here
 
